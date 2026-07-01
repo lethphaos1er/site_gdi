@@ -1,3 +1,11 @@
+@import "./root/root.css";
+@import "./base/base.css";
+@import "./layout/layout.css";
+@import "./components/components.css";
+@import "./pages/pages.css";
+@import "./utilities/utilities.css";
+@import "./responsive/responsive.css";
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
