@@ -1,6 +1,7 @@
 <script setup>
+import { ref } from 'vue';
 import ProductQuantity from './ProductQuantity.vue';
-import { truncate } from '@/tools/tools.js';
+import { truncate, isTruncated } from '@/tools/tools.js';
 
 const props = defineProps({
     product: {
@@ -10,6 +11,10 @@ const props = defineProps({
 });
 
 const isExpanded = ref(false);
+
+function toggleDescription() {
+    isExpanded.value = !isExpanded.value;
+}
 
 function addProduct(quantity) {
     console.log('Produit ajouté :', {
@@ -21,7 +26,11 @@ function addProduct(quantity) {
 
 <template>
     <article class="product-card">
-        <img :src="product.image" :alt="product.name" class="product-card__image">
+        <img
+            :src="product.image"
+            :alt="product.name"
+            class="product-card__image"
+        >
 
         <div class="product-card__content">
             <header class="product-card__header">
@@ -47,13 +56,20 @@ function addProduct(quantity) {
                     }}
                 </p>
 
-                <button v-if="isTruncated(product.description, 50)" type="button" class="product-card__more"
-                    @click="toggleDescription">
+                <button
+                    v-if="isTruncated(product.description, 50)"
+                    type="button"
+                    class="product-card__more"
+                    @click="toggleDescription"
+                >
                     {{ isExpanded ? 'Voir moins ▲' : 'En savoir plus ▼' }}
                 </button>
             </div>
 
-            <ProductQuantity :stock="product.stock" @add-product="addProduct" />
+            <ProductQuantity
+                :stock="product.stock"
+                @add-product="addProduct"
+            />
         </div>
     </article>
 </template>

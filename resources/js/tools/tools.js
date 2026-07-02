@@ -1,0 +1,1 @@
+export { truncate, isTruncated } from './truncate.js';

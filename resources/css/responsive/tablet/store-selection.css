@@ -1,0 +1,36 @@
+@media (min-width: 768px) {
+    .store-content {
+        display: grid;
+        grid-template-columns: 16rem 1fr;
+        gap: 1.5rem;
+    }
+
+    .department-wrapper {
+        position: static;
+        top: auto;
+
+        margin-block: 0;
+        padding: 0;
+
+        overflow: visible;
+    }
+    
+    .department-selector {
+        flex-direction: column;
+        width: auto;
+        overflow-x: visible;
+    }
+
+    .department-selector__button {
+        width: 100%;
+        padding: 0.75rem 1rem;
+        border: 1px solid currentColor;
+        border-radius: 0.5rem;
+        text-align: left;
+    }
+
+    .department-selector__button:hover,
+    .department-selector__button.active {
+        background-color: var(--color-quantity-button-bg);
+    }
+}

@@ -1,0 +1,124 @@
+.store-page {
+    width: min(100%, 75rem);
+    min-height: 100vh;
+    margin-inline: auto;
+    padding: 1rem;
+
+    background-color: var(--color-background);
+}
+
+.store-selector,
+.department-menu {
+    margin-bottom: 1rem;
+}
+
+.store-selector__toggle,
+.department-menu__toggle {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+
+    width: 100%;
+    padding: 0.75rem 1rem;
+
+    border: 1px solid currentColor;
+    border-radius: 0.5rem;
+
+    background-color: var(--color-background);
+    color: inherit;
+
+    text-align: left;
+    cursor: pointer;
+}
+
+.store-selector__list,
+.department-selector {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+
+    margin: 0.75rem 0 0;
+    padding: 0;
+
+    list-style: none;
+}
+
+.store-selector__button,
+.department-selector__button {
+    width: 100%;
+    padding: 0.75rem 1rem;
+
+    border: 1px solid currentColor;
+    border-radius: 0.5rem;
+
+    background-color: var(--color-background);
+    color: inherit;
+
+    text-align: left;
+    cursor: pointer;
+}
+
+.store-selector__button.active,
+.department-selector__button.active {
+    font-weight: 700;
+    text-decoration: underline;
+}
+
+.department-wrapper {
+    margin-block: 1rem;
+}
+
+.products-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
+@media (min-width: 768px) {
+    .store-selector__toggle,
+    .department-menu__toggle {
+        display: none;
+    }
+
+    .store-selector__list,
+    .department-selector {
+        display: flex !important;
+    }
+
+    .store-selector__list {
+        flex-direction: row;
+        gap: 1rem;
+
+        margin: 0 0 1rem;
+    }
+
+    .store-selector__button {
+        width: auto;
+        padding: 0;
+
+        border: 0;
+        border-radius: 0;
+
+        background-color: transparent;
+    }
+
+    .store-content {
+        display: grid;
+        grid-template-columns: 16rem 1fr;
+        gap: 1.5rem;
+    }
+
+    .department-wrapper {
+        margin-block: 0;
+    }
+
+    .department-selector {
+        flex-direction: column;
+        margin: 0;
+    }
+
+    .department-selector__button:hover,
+    .department-selector__button.active {
+        background-color: var(--color-quantity-button-bg);
+    }
+}

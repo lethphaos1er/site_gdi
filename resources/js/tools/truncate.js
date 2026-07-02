@@ -16,3 +16,11 @@ export function truncate(text, maxLength) {
 
     return `${slicedText.slice(0, lastSpaceIndex)}…`;
 }
+
+export function isTruncated(text, maxLength) {
+    if (!text) {
+        return false;
+    }
+
+    return text.length > maxLength;
+}

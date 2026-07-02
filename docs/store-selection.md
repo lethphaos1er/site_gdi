@@ -2,133 +2,272 @@
 
 ## Objectif
 
-Permettre à un utilisateur de :
+La fonctionnalité **Store Selection** permet à l'utilisateur de :
 
 1. Choisir un magasin.
-2. Choisir un rayon.
-3. Consulter les produits.
-4. Ajouter un produit au panier.
+2. Choisir un rayonnage.
+3. Consulter les produits disponibles.
+4. Sélectionner une quantité.
+5. Ajouter un produit au panier (à venir).
+
+Cette fonctionnalité est actuellement basée sur une fake database (`stores.js`) qui sera remplacée plus tard par les données provenant de Laravel.
 
 ---
 
 # Architecture
 
-StoreSelection.vue
+La page suit une architecture où les **Pages** ne font que de l'orchestration.
 
-- Orchestrateur de la page.
-- Gère l'état.
-- Gère les événements.
-- Assemble les composants.
+Les composants sont responsables de leur propre affichage.
+
+Les fonctions utilitaires sont placées dans `tools`.
+
+```
+Page
+│
+├── StoreHeader
+├── StoreSelector
+└── StoreContent
+      │
+      ├── ProductCard
+      │      │
+      │      └── ProductQuantity
+      │
+      └── ...
+```
 
 ---
 
-## Composants
+# Arborescence
 
-### StoreHeader.vue
+```
+resources
+└── js
+    ├── Components
+    │   └── Front
+    │       └── StoreSelection
+    │           ├── ProductCard.vue
+    │           ├── ProductQuantity.vue
+    │           ├── StoreContent.vue
+    │           ├── StoreHeader.vue
+    │           ├── StoreSelector.vue
+    │           └── storeSelection.js
+    │
+    ├── Pages
+    │   └── Front
+    │       └── StoreSelection.vue
+    │
+    ├── data
+    │   └── stores.js
+    │
+    └── tools
+        ├── truncate.js
+        └── tools.js
 
-Responsable de l'en-tête de la page.
+resources
+└── css
+    ├── components
+    │   ├── product-card.css
+    │   ├── product-quantity.css
+    │   └── components.css
+    │
+    └── pages
+        ├── store-selection.css
+        └── pages.css
+```
 
-### StoreSelector.vue
+---
+
+# Responsabilités
+
+## StoreSelection.vue
+
+Responsabilités :
+
+- importe la fake DB ;
+- gère le magasin sélectionné ;
+- gère le rayonnage sélectionné ;
+- transmet les données aux composants.
+
+Cette page ne contient quasiment aucun HTML.
+
+---
+
+## StoreHeader.vue
+
+Responsable de l'en-tête.
+
+Contient :
+
+- le H1 ;
+- le texte d'introduction.
+
+---
+
+## StoreSelector.vue
 
 Responsable de la sélection du magasin.
 
-### StoreContent.vue
+Émet :
 
-Responsable :
+```
+select-store
+```
 
-- de l'affichage des rayons ;
-- de la liste des produits.
+---
 
-### ProductCard.vue
+## StoreContent.vue
+
+Responsable de :
+
+- l'affichage des rayonnages ;
+- l'affichage des produits ;
+- la communication avec ProductCard.
+
+Émet :
+
+```
+select-department
+```
+
+---
+
+## ProductCard.vue
 
 Responsable de l'affichage d'un produit.
 
-Contient :
+Affiche :
 
 - image ;
 - nom ;
 - prix ;
 - stock ;
 - description ;
-- bouton Voir plus (à venir) ;
+- bouton "En savoir plus / Voir moins" ;
 - ProductQuantity.
 
-### ProductQuantity.vue
-
-Responsable uniquement de la quantité.
-
-Règles métier :
-
-- quantité minimale : 1 ;
-- quantité maximale : stock ;
-- bouton "-" désactivé à 1 ;
-- bouton "+" désactivé au stock maximum ;
-- bouton "Ajouter au panier" désactivé si stock = 0.
-
-Émet :
-
-- add-product.
+Ne contient aucune logique de panier.
 
 ---
 
-# Fake Data
+## ProductQuantity.vue
 
+Responsable uniquement de la quantité.
+
+Affiche :
+
+```
+-
+Quantité
++
+Ajouter au panier
+```
+
+Règles :
+
+- minimum = 1 ;
+- maximum = stock ;
+- impossible d'ajouter si stock = 0 ;
+- impossible de dépasser le stock ;
+- possibilité de saisir la quantité au clavier.
+
+Émet :
+
+```
+add-product
+```
+
+---
+
+# Fake Database
+
+```
 stores
 └── departments
     └── products
+```
+
+Chaque produit contient actuellement :
+
+- id
+- name
+- image
+- description
+- price
+- stock
+
+Cette structure sera remplacée ultérieurement par Laravel.
+
+---
+
+# Tools
+
+## truncate()
+
+```
+truncate(text, limit)
+```
+
+Fonction responsable de :
+
+- limiter une description ;
+- couper au dernier mot complet ;
+- ajouter "…" lorsque le texte est tronqué.
+
+La fonction ne contient aucune logique d'affichage.
+
+---
+
+## isTruncated()
+
+```
+isTruncated(text, limit)
+```
+
+Retourne :
+
+- true
+- false
+
+Permet d'afficher ou non le bouton :
+
+```
+En savoir plus
+```
 
 ---
 
 # Card produit
 
-Disposition mobile :
+Disposition mobile validée
 
-IMAGE | Nom
-      | Prix
-      | En stock
+```
+┌──────────────────────────────────────────────┐
+│ IMAGE │ Nom                                 │
+│       │ Prix                                │
+│       │ En stock                            │
+│       │──────────────────────────────────── │
+│       │ Description + allergènes            │
+│       │ Voir plus / Voir moins              │
+│       │──────────────────────────────────── │
+│       │                                     │
+│       │      [-] [ 1 ] [+]                  │
+│       │   🛒 Ajouter au panier              │
+└──────────────────────────────────────────────┘
+```
 
--------------------------
-
-Description + allergènes
-
-Voir plus
-
-        [-] [1] [+]
-
-     🛒 Ajouter au panier
-
----
-
-# Responsive
-
-Mobile
-
-- une seule colonne ;
-- navigation des rayons sticky.
-
-Tablette
-
-- à définir.
-
-Desktop
-
-- grille 1/3 - 2/3.
+Le bloc quantité est placé sous la description afin de favoriser une utilisation confortable sur mobile.
 
 ---
-
-# Évolutions prévues
-
-- truncate automatique ;
-- Voir plus ;
-- allergènes ;
-- panier réel ;
-- promotions ;
-- disponibilité dynamique via Laravel.
 
 # Choix d'architecture
 
-- Les pages jouent uniquement le rôle d'orchestrateur.
+Les principes retenus pour ce projet sont :
+
+- Les pages orchestrent les composants.
 - Les composants sont regroupés par fonctionnalité.
 - Chaque fonctionnalité possède un fichier d'export (`storeSelection.js`).
-- Le CSS suit la même logique avec un fichier par composant (`product-card.css`, `product-quantity.css`) et des fichiers d'entrée (`components.css`, `pages.css`).
-- Les composants enfants ne connaissent jamais le panier ; ils communiquent uniquement par `props` et `emit`.
+- Le CSS est organisé selon la même logique (`components.css`, `pages.css`).
+- Les outils sont centralisés dans `tools`.
+- Les composants enfants ne connaissent jamais le panier ; ils communiquent uniquement via `props` et `emit`.
+- Les fonctions utilitaires restent pures et ne contiennent aucune logique d'interface.

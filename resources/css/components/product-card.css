@@ -5,6 +5,7 @@
     padding: 1rem;
     border: 1px solid currentColor;
     border-radius: 0.75rem;
+    margin-bottom: 1.5rem;
 }
 
 .product-card__image {
