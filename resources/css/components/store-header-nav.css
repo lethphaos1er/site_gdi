@@ -1,0 +1,25 @@
+.store-header-nav {
+    margin-top: 1.5rem;
+}
+
+.store-header-nav__list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+
+    margin: 0;
+    padding: 0;
+
+    list-style: none;
+}
+
+.store-header-nav__list a,
+.store-header-nav__list button {
+    display: inline-flex;
+    align-items: center;
+
+    padding: 0.5rem 1rem;
+
+    text-decoration: none;
+    cursor: pointer;
+}
