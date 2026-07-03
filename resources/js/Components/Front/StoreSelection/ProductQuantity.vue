@@ -1,26 +1,52 @@
 <script setup>
-import { ref } from 'vue';
+import { ref, watch } from 'vue';
 
 const props = defineProps({
     stock: {
         type: Number,
         required: true,
     },
+    modelValue: {
+        type: Number,
+        default: null,
+    },
+    showActionButton: {
+        type: Boolean,
+        default: true,
+    },
 });
 
-const emit = defineEmits(['add-product']);
+const emit = defineEmits([
+    'add-product',
+    'update:modelValue',
+]);
 
-const quantity = ref(props.stock > 0 ? 1 : 0);
+const quantity = ref(props.modelValue ?? (props.stock > 0 ? 1 : 0));
+
+watch(
+    () => props.modelValue,
+    (value) => {
+        if (value !== null) {
+            quantity.value = value;
+        }
+    }
+);
+
+function updateQuantity(value) {
+    quantity.value = value;
+    normalizeQuantity();
+    emit('update:modelValue', quantity.value);
+}
 
 function decreaseQuantity() {
     if (quantity.value > 1) {
-        quantity.value--;
+        updateQuantity(quantity.value - 1);
     }
 }
 
 function increaseQuantity() {
     if (quantity.value < props.stock) {
-        quantity.value++;
+        updateQuantity(quantity.value + 1);
     }
 }
 
@@ -63,7 +89,7 @@ function addProduct() {
                 min="1"
                 :max="stock"
                 :disabled="stock <= 0"
-                @change="normalizeQuantity"
+                @change="updateQuantity(quantity)"
             >
 
             <button
@@ -77,6 +103,7 @@ function addProduct() {
         </div>
 
         <button
+            v-if="showActionButton"
             type="button"
             class="product-quantity__add"
             :disabled="stock <= 0 || quantity < 1 || quantity > stock"

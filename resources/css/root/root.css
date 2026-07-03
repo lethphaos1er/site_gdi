@@ -4,14 +4,29 @@
        ========================================================== */
     /* Background */
     --color-background: #e9e9e9;
-    --color-quantity-button-bg: #f4f4f4;
-    --color-quantity-button-bg-hover: #e6e6e6;
+    --color-surface: #f4f4f4;
+    --color-surface-hover: #e6e6e6;
+
+    --color-quantity-button-bg: var(--color-surface);
+    --color-quantity-button-bg-hover: var(--color-surface-hover);
+
     --color-add-cart-bg: #2f7d32;
     --color-add-cart-bg-hover: #266728;
 
+    --color-danger: #9f1d1d;
+    --color-danger-hover: #7f1d1d;
+
+    --color-delete-button-bg: transparent;
+    --color-delete-button-bg-hover: var(--color-danger);
+    --color-delete-button-border: var(--color-danger);
+    
     /* Text */
     --color-text: #101010;
-    --color-add-cart-text: #e9e9e9;
+    --color-text-inverted: #e9e9e9;
+
+    --color-add-cart-text: var(--color-text-inverted);
+    --color-delete-button-text: var(--color-danger);
+    --color-delete-button-text-hover: var(--color-text-inverted);
 
     /* ==========================================================
        END COLORS

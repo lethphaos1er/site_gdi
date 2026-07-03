@@ -1,6 +1,7 @@
 <script setup>
 import { ref } from 'vue';
 import stores from '@/data/stores';
+import CartDrawer from '@/Components/Front/cart/CartDrawer.vue';
 
 import {
     StoreHeader,
@@ -26,7 +27,7 @@ function selectDepartment(department) {
 </script>
 
 <template>
-    <main>
+    <main class="store-page">
         <StoreHeader />
 
         <StoreSelector
@@ -40,5 +41,6 @@ function selectDepartment(department) {
             :selected-department="selectedDepartment"
             @select-department="selectDepartment"
         />
+         <CartDrawer />
     </main>
 </template>

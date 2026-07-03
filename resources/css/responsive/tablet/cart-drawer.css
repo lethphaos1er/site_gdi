@@ -1,0 +1,13 @@
+@media (min-width: 768px) {
+    .cart-drawer {
+        right: 1.5rem;
+        bottom: 1.5rem;
+        left: auto;
+
+        width: min(24rem, calc(100vw - 3rem));
+    }
+
+    .cart-drawer__toggle {
+        margin-inline: auto 0;
+    }
+}

@@ -1,6 +1,7 @@
 <script setup>
 import { ref } from 'vue';
 import ProductQuantity from './ProductQuantity.vue';
+import { useCartStore } from '@/stores/cart';
 import { truncate, isTruncated } from '@/tools/tools.js';
 
 const props = defineProps({
@@ -10,6 +11,7 @@ const props = defineProps({
     },
 });
 
+const cart = useCartStore();
 const isExpanded = ref(false);
 
 function toggleDescription() {
@@ -17,10 +19,7 @@ function toggleDescription() {
 }
 
 function addProduct(quantity) {
-    console.log('Produit ajouté :', {
-        product: props.product,
-        quantity,
-    });
+    cart.addProduct(props.product, quantity);
 }
 </script>
 
