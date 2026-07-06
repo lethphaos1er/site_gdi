@@ -1,0 +1,20 @@
+.backoffice-page__header {
+    margin-bottom: 1.5rem;
+}
+
+.backoffice-page__back {
+    margin-bottom: 1rem;
+}
+
+.backoffice-store-grid__items {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
+.backoffice-stock-actions {
+    display: flex;
+    justify-content: center;
+
+    margin-top: 1rem;
+}

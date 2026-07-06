@@ -33,4 +33,19 @@ Route::middleware(['auth', 'verified'])->group(function () {
         ->name('profile.destroy');
 });
 
+Route::middleware(['auth'])
+    ->prefix('backoffice')
+    ->name('backoffice.')
+    ->group(function () {
+        Route::get('/stores', function () {
+            return Inertia::render('Backoffice/StoreIndex');
+        })->name('stores.index');
+
+        Route::get('/stores/{store}/stock', function (string $store) {
+            return Inertia::render('Backoffice/StoreStock', [
+                'storeId' => $store,
+            ]);
+        })->name('stores.stock');
+    });
+
 require __DIR__ . '/auth.php';
