@@ -1,0 +1,14 @@
+@media (min-width: 768px) {
+    .profile-page {
+        padding: 3rem 1.5rem;
+    }
+
+    .profile-card {
+        padding: 2rem;
+    }
+
+    .profile-delete__actions {
+        flex-direction: row;
+        justify-content: flex-end;
+    }
+}

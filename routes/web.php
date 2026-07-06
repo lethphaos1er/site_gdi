@@ -10,15 +10,15 @@ Route::get('/', [HomeController::class, 'index'])
 
 Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('/dashboard', function () {
-        return Inertia::render('Front/Customer/Dashboard');
+        return Inertia::render('Customer/Dashboard');
     })->name('dashboard');
 
     Route::get('/customer/orders', function () {
-        return Inertia::render('Front/Customer/Orders/Index');
+        return Inertia::render('Customer/Order/Index');
     })->name('customer.orders.index');
 
     Route::get('/customer/orders/{order}', function (int $order) {
-        return Inertia::render('Front/Customer/Orders/Show', [
+        return Inertia::render('Customer/Order/Show', [
             'orderId' => $order,
         ]);
     })->name('customer.orders.show');

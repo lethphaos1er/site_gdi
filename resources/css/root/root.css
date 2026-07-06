@@ -27,6 +27,7 @@
     --color-add-cart-text: var(--color-text-inverted);
     --color-delete-button-text: var(--color-danger);
     --color-delete-button-text-hover: var(--color-text-inverted);
+    --color-success: #2f7d32;
 
     /* ==========================================================
        END COLORS
