@@ -7,7 +7,7 @@ import {
     StoreHeader,
     StoreSelector,
     StoreContent,
-} from '@/Components/Front/storeSelection/storeSelection.js';
+} from '@/Components/Front/StoreSelection/StoreSelection.js';
 
 const selectedStore = ref(null);
 const selectedDepartment = ref(null);
@@ -15,14 +15,10 @@ const selectedDepartment = ref(null);
 function selectStore(store) {
     selectedStore.value = store;
     selectedDepartment.value = null;
-
-    console.log('Magasin sélectionné :', store);
 }
 
 function selectDepartment(department) {
     selectedDepartment.value = department;
-
-    console.log('Rayonnage sélectionné :', department);
 }
 </script>
 
@@ -41,6 +37,7 @@ function selectDepartment(department) {
             :selected-department="selectedDepartment"
             @select-department="selectDepartment"
         />
-         <CartDrawer />
+
+        <CartDrawer />
     </main>
 </template>

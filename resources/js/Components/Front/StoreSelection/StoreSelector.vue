@@ -1,5 +1,6 @@
 <script setup>
 import { ref } from 'vue';
+import { useCartStore } from '@/stores/cart';
 
 const props = defineProps({
     stores: {
@@ -14,13 +15,22 @@ const props = defineProps({
 
 const emit = defineEmits(['selectStore']);
 
+const cart = useCartStore();
 const isStoreMenuOpen = ref(false);
 
 function toggleStoreMenu() {
     isStoreMenuOpen.value = !isStoreMenuOpen.value;
 }
 
+function isStoreDisabled(store) {
+    return Boolean(cart.storeId && cart.storeId !== store.id);
+}
+
 function handleStoreSelection(store) {
+    if (isStoreDisabled(store)) {
+        return;
+    }
+
     emit('selectStore', store);
     isStoreMenuOpen.value = false;
 }
@@ -39,6 +49,13 @@ function handleStoreSelection(store) {
             <span>{{ selectedStore?.name ?? 'Sélectionnez un magasin' }}</span>
         </button>
 
+        <p
+            v-if="cart.storeName"
+            class="store-selector__notice"
+        >
+            Panier en cours chez {{ cart.storeName }}. Videz le panier pour changer de magasin.
+        </p>
+
         <ul
             v-show="isStoreMenuOpen"
             id="store-selector-menu"
@@ -53,9 +70,14 @@ function handleStoreSelection(store) {
                     type="button"
                     class="store-selector__button"
                     :class="{ active: selectedStore && selectedStore.id === store.id }"
+                    :disabled="isStoreDisabled(store)"
                     @click="handleStoreSelection(store)"
                 >
                     {{ store.name }}
+
+                    <span v-if="isStoreDisabled(store)">
+                        — panier verrouillé
+                    </span>
                 </button>
             </li>
         </ul>

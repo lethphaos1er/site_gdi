@@ -1,6 +1,6 @@
 <script setup>
 import { ref, watch } from 'vue';
-import { ProductCard } from './storeSelection.js';
+import { ProductCard } from './StoreSelection.js';
 
 const props = defineProps({
     selectedStore: {
@@ -46,32 +46,17 @@ watch(
             </p>
 
             <div v-else class="department-menu">
-                <button
-                    type="button"
-                    class="department-menu__toggle"
-                    :aria-expanded="isDepartmentMenuOpen"
-                    aria-controls="department-selector-menu"
-                    @click="toggleDepartmentMenu"
-                >
+                <button type="button" class="department-menu__toggle" :aria-expanded="isDepartmentMenuOpen"
+                    aria-controls="department-selector-menu" @click="toggleDepartmentMenu">
                     <span aria-hidden="true">☰</span>
                     <span>{{ selectedDepartment?.name ?? 'Sélectionnez un rayonnage' }}</span>
                 </button>
 
-                <ul
-                    v-show="isDepartmentMenuOpen"
-                    id="department-selector-menu"
-                    class="department-selector"
-                >
-                    <li
-                        v-for="department in selectedStore.departments"
-                        :key="department.id"
-                    >
-                        <button
-                            type="button"
-                            class="department-selector__button"
+                <ul v-show="isDepartmentMenuOpen" id="department-selector-menu" class="department-selector">
+                    <li v-for="department in selectedStore.departments" :key="department.id">
+                        <button type="button" class="department-selector__button"
                             :class="{ active: selectedDepartment && selectedDepartment.id === department.id }"
-                            @click="handleDepartmentSelection(department)"
-                        >
+                            @click="handleDepartmentSelection(department)">
                             {{ department.name }}
                         </button>
                     </li>
@@ -89,11 +74,10 @@ watch(
             </p>
 
             <div v-else class="products-grid">
-                <ProductCard
-                    v-for="product in selectedDepartment.products"
-                    :key="product.id"
+                <ProductCard v-for="product in selectedDepartment.products" 
+                    :key="product.id" 
                     :product="product"
-                />
+                    :store="selectedStore" />
             </div>
         </section>
     </div>

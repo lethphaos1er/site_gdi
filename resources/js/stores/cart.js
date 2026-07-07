@@ -9,7 +9,20 @@ function loadCartItems() {
         return [];
     }
 
-    return JSON.parse(storedItems);
+    const items = JSON.parse(storedItems);
+
+    if (!Array.isArray(items)) {
+        return [];
+    }
+
+    const hasInvalidItem = items.some((item) => !item.storeId || !item.storeName);
+
+    if (hasInvalidItem) {
+        localStorage.removeItem(CART_STORAGE_KEY);
+        return [];
+    }
+
+    return items;
 }
 
 function saveCartItems(items) {
@@ -28,6 +41,10 @@ export const useCartStore = defineStore('cart', {
             (total, item) => total + item.price * item.quantity,
             0
         ),
+
+        storeId: (state) => state.items[0]?.storeId ?? null,
+
+        storeName: (state) => state.items[0]?.storeName ?? null,
     },
 
     actions: {
@@ -35,12 +52,20 @@ export const useCartStore = defineStore('cart', {
             saveCartItems(this.items);
         },
 
-        addProduct(product, quantity) {
+        canUseStore(storeId) {
+            return !this.storeId || this.storeId === storeId;
+        },
+
+        addProduct(product, quantity, store) {
+            if (!this.canUseStore(store.id)) {
+                return false;
+            }
+
             const existingItem = this.items.find((item) => item.id === product.id);
 
             if (existingItem) {
                 this.updateQuantity(product.id, existingItem.quantity + quantity);
-                return;
+                return true;
             }
 
             this.items.push({
@@ -50,9 +75,13 @@ export const useCartStore = defineStore('cart', {
                 image: product.image,
                 stock: product.stock,
                 quantity,
+                storeId: store.id,
+                storeName: store.name,
             });
 
             this.save();
+
+            return true;
         },
 
         updateQuantity(productId, quantity) {

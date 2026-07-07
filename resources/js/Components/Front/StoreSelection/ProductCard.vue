@@ -1,5 +1,5 @@
 <script setup>
-import { ref } from 'vue';
+import { computed, ref } from 'vue';
 import ProductQuantity from './ProductQuantity.vue';
 import { useCartStore } from '@/stores/cart';
 import { truncate, isTruncated } from '@/tools/tools.js';
@@ -9,17 +9,27 @@ const props = defineProps({
         type: Object,
         required: true,
     },
+
+    store: {
+        type: Object,
+        required: true,
+    },
 });
 
 const cart = useCartStore();
 const isExpanded = ref(false);
+const hasStoreError = ref(false);
+
+const isLockedToAnotherStore = computed(() => !cart.canUseStore(props.store.id));
 
 function toggleDescription() {
     isExpanded.value = !isExpanded.value;
 }
 
 function addProduct(quantity) {
-    cart.addProduct(props.product, quantity);
+    const isAdded = cart.addProduct(props.product, quantity, props.store);
+
+    hasStoreError.value = !isAdded;
 }
 </script>
 
@@ -64,11 +74,25 @@ function addProduct(quantity) {
                     {{ isExpanded ? 'Voir moins ▲' : 'En savoir plus ▼' }}
                 </button>
             </div>
+            
+
+            <p
+                v-if="hasStoreError || isLockedToAnotherStore"
+                class="product-card__warning"
+            >
+                Vous avez déjà des articles du magasin {{ cart.storeName }} dans le panier.
+                Impossible d’ajouter des articles venant d’un autre magasin.
+                Videz le panier pour changer de magasin.
+            </p>
 
             <ProductQuantity
                 :stock="product.stock"
+                :is-action-disabled="isLockedToAnotherStore"
                 @add-product="addProduct"
             />
+            <p style="display: block; padding: 1rem; border: 3px solid red; background: yellow; color: black;">
+    DEBUG PRODUCT CARD - {{ cart.storeName ?? 'aucun magasin panier' }}
+</p>
         </div>
     </article>
 </template>

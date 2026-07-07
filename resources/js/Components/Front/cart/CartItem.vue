@@ -1,5 +1,5 @@
 <script setup>
-import ProductQuantity from '@/Components/Front/storeSelection/ProductQuantity.vue';
+import ProductQuantity from '@/Components/Front/StoreSelection/ProductQuantity.vue';
 import { useCartStore } from '@/stores/cart';
 
 const props = defineProps({

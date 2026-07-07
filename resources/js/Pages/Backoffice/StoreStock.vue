@@ -56,20 +56,6 @@ function saveStock() {
     if (!store.value) {
         return;
     }
-
-    const stockPayload = store.value.departments.flatMap((department) => {
-        return department.products.map((product) => {
-            return {
-                productId: product.id,
-                quantity: product.stock,
-            };
-        });
-    });
-
-    console.log('Stock complet sauvegardé localement', {
-        storeId: store.value.id,
-        products: stockPayload,
-    });
 }
 </script>
 
