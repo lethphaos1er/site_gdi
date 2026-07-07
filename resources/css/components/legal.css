@@ -1,0 +1,126 @@
+.legal-notice-banner {
+    position: fixed;
+    right: 1rem;
+    bottom: 1rem;
+    left: 1rem;
+    z-index: 9999;
+
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+
+    max-width: 48rem;
+    margin-inline: auto;
+    padding: 1rem;
+
+    border: 1px solid #1f2937;
+    border-radius: 0.75rem;
+
+    background-color: #ffffff;
+    color: #111827;
+
+    box-shadow: 0 1rem 2rem rgb(0 0 0 / 20%);
+}
+
+.cookie-consent__content {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.cookie-consent__title,
+.cookie-consent__settings-title {
+    margin: 0;
+}
+
+.cookie-consent__text,
+.cookie-consent__notice {
+    margin: 0;
+}
+
+.cookie-consent__notice {
+    font-size: 0.95rem;
+}
+
+.cookie-consent__actions,
+.cookie-consent__settings-actions {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.cookie-consent__button {
+    min-height: 2.75rem;
+    padding: 0.75rem 1rem;
+
+    border: 1px solid currentColor;
+    border-radius: 0.5rem;
+
+    cursor: pointer;
+    font: inherit;
+}
+
+.cookie-consent__button--primary {
+    background-color: #15803d;
+    color: #ffffff;
+}
+
+.cookie-consent__button--primary:hover,
+.cookie-consent__button--primary:focus-visible {
+    background-color: #166534;
+}
+
+.cookie-consent__button--secondary {
+    background-color: #ffffff;
+    color: #111827;
+}
+
+.cookie-consent__button--secondary:hover,
+.cookie-consent__button--secondary:focus-visible {
+    background-color: #f3f4f6;
+}
+
+.cookie-consent__settings {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+
+    padding-top: 1rem;
+    border-top: 1px solid currentColor;
+}
+
+.cookie-consent__option {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.75rem;
+}
+
+.cookie-consent__option input {
+    width: 1.25rem;
+    height: 1.25rem;
+    margin-top: 0.15rem;
+}
+
+.cookie-consent__option label {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+}
+
+.cookie-consent__option span {
+    font-size: 0.9rem;
+}
+
+@media (min-width: 768px) {
+    .cookie-consent {
+        right: 2rem;
+        bottom: 2rem;
+        left: auto;
+    }
+
+    .cookie-consent__actions,
+    .cookie-consent__settings-actions {
+        flex-direction: row;
+        justify-content: flex-end;
+    }
+}
