@@ -43,3 +43,13 @@
 .product-card__description p {
     margin: 0;
 }
+
+.product-card__image--placeholder {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border: 1px solid currentColor;
+
+    font-size: 2rem;
+}

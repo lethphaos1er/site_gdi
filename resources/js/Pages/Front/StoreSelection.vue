@@ -10,15 +10,22 @@ import {
 } from '@/Components/Front/StoreSelection/StoreSelection.js';
 
 const selectedStore = ref(null);
-const selectedDepartment = ref(null);
+const selectedCategory = ref(null);
+const selectedSubcategory = ref(null);
 
 function selectStore(store) {
     selectedStore.value = store;
-    selectedDepartment.value = null;
+    selectedCategory.value = null;
+    selectedSubcategory.value = null;
 }
 
-function selectDepartment(department) {
-    selectedDepartment.value = department;
+function selectCategory(category) {
+    selectedCategory.value = category;
+    selectedSubcategory.value = null;
+}
+
+function selectSubcategory(subcategory) {
+    selectedSubcategory.value = subcategory;
 }
 </script>
 
@@ -34,8 +41,10 @@ function selectDepartment(department) {
 
         <StoreContent
             :selected-store="selectedStore"
-            :selected-department="selectedDepartment"
-            @select-department="selectDepartment"
+            :selected-category="selectedCategory"
+            :selected-subcategory="selectedSubcategory"
+            @select-category="selectCategory"
+            @select-subcategory="selectSubcategory"
         />
 
         <CartDrawer />

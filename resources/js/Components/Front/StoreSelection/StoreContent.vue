@@ -1,5 +1,5 @@
 <script setup>
-import { ref, watch } from 'vue';
+import { computed, ref, watch } from 'vue';
 import { ProductCard } from './StoreSelection.js';
 
 const props = defineProps({
@@ -7,77 +7,170 @@ const props = defineProps({
         type: Object,
         default: null,
     },
-    selectedDepartment: {
+    selectedCategory: {
+        type: Object,
+        default: null,
+    },
+    selectedSubcategory: {
         type: Object,
         default: null,
     },
 });
 
-const emit = defineEmits(['select-department']);
+const emit = defineEmits([
+    'select-category',
+    'select-subcategory',
+]);
 
-const isDepartmentMenuOpen = ref(false);
+const isCategoryMenuOpen = ref(false);
 
-function toggleDepartmentMenu() {
-    isDepartmentMenuOpen.value = !isDepartmentMenuOpen.value;
+const displayedProducts = computed(() => {
+    if (props.selectedSubcategory) {
+        return props.selectedSubcategory.products ?? [];
+    }
+
+    if (!props.selectedCategory || !props.selectedCategory.subcategories) {
+        return [];
+    }
+
+    return props.selectedCategory.subcategories.flatMap((subcategory) => {
+        return subcategory.products ?? [];
+    });
+});
+
+function toggleCategoryMenu() {
+    isCategoryMenuOpen.value = !isCategoryMenuOpen.value;
 }
 
-function handleDepartmentSelection(department) {
-    emit('select-department', department);
-    isDepartmentMenuOpen.value = false;
+function handleCategorySelection(category) {
+    if (props.selectedCategory && props.selectedCategory.id === category.id) {
+        emit('select-category', null);
+        emit('select-subcategory', null);
+        return;
+    }
+
+    emit('select-category', category);
+    emit('select-subcategory', null);
+}
+
+function handleSubcategorySelection(subcategory) {
+    emit('select-subcategory', subcategory);
+    isCategoryMenuOpen.value = false;
 }
 
 watch(
     () => props.selectedStore,
     () => {
-        isDepartmentMenuOpen.value = false;
+        isCategoryMenuOpen.value = false;
     }
 );
 </script>
 
 <template>
-    <p v-if="!selectedStore" class="store-empty-state">
+    <p
+        v-if="!selectedStore"
+        class="store-empty-state"
+    >
         Sélectionnez un magasin pour commencer.
     </p>
 
-    <div v-else class="store-content">
+    <div
+        v-else
+        class="store-content"
+    >
         <aside class="department-wrapper">
-            <p v-if="!selectedStore.departments || !selectedStore.departments.length">
-                Aucun rayonnage disponible.
-            </p>
+            <div class="department-menu">
+                <p
+                    id="category-selector-title"
+                    class="department-menu__title"
+                >
+                    Catégories
+                </p>
 
-            <div v-else class="department-menu">
-                <button type="button" class="department-menu__toggle" :aria-expanded="isDepartmentMenuOpen"
-                    aria-controls="department-selector-menu" @click="toggleDepartmentMenu">
-                    <span aria-hidden="true">☰</span>
-                    <span>{{ selectedDepartment?.name ?? 'Sélectionnez un rayonnage' }}</span>
-                </button>
+                <p v-if="!selectedStore.categories || !selectedStore.categories.length">
+                    Aucune catégorie disponible.
+                </p>
 
-                <ul v-show="isDepartmentMenuOpen" id="department-selector-menu" class="department-selector">
-                    <li v-for="department in selectedStore.departments" :key="department.id">
-                        <button type="button" class="department-selector__button"
-                            :class="{ active: selectedDepartment && selectedDepartment.id === department.id }"
-                            @click="handleDepartmentSelection(department)">
-                            {{ department.name }}
-                        </button>
-                    </li>
-                </ul>
+                <template v-else>
+                    <button
+                        type="button"
+                        class="department-menu__toggle"
+                        :aria-expanded="isCategoryMenuOpen"
+                        aria-controls="category-selector-menu"
+                        @click="toggleCategoryMenu"
+                    >
+                        <span aria-hidden="true">☰</span>
+                        <span>{{ selectedCategory?.name ?? 'Sélectionnez une catégorie' }}</span>
+                    </button>
+
+                    <ul
+                        v-show="isCategoryMenuOpen"
+                        id="category-selector-menu"
+                        class="department-selector"
+                        aria-labelledby="category-selector-title"
+                    >
+                        <li
+                            v-for="category in selectedStore.categories"
+                            :key="category.id"
+                            class="department-selector__item"
+                        >
+                            <button
+                                type="button"
+                                class="department-selector__button"
+                                :class="{ active: selectedCategory && selectedCategory.id === category.id }"
+                                @click="handleCategorySelection(category)"
+                            >
+                                {{ category.name }}
+                            </button>
+
+                            <ul
+                                v-if="
+                                    selectedCategory
+                                    && selectedCategory.id === category.id
+                                    && category.subcategories
+                                    && category.subcategories.length
+                                "
+                                class="subcategory-selector"
+                            >
+                                <li
+                                    v-for="subcategory in category.subcategories"
+                                    :key="subcategory.id"
+                                >
+                                    <button
+                                        type="button"
+                                        class="subcategory-selector__button"
+                                        :class="{ active: selectedSubcategory && selectedSubcategory.id === subcategory.id }"
+                                        @click="handleSubcategorySelection(subcategory)"
+                                    >
+                                        {{ subcategory.name }}
+                                    </button>
+                                </li>
+                            </ul>
+                        </li>
+                    </ul>
+                </template>
             </div>
         </aside>
 
         <section class="products-container">
-            <p v-if="!selectedDepartment">
-                Aucun rayonnage sélectionné. Sélectionnez-en un pour consulter les articles.
+            <p v-if="!selectedCategory">
+                Aucune catégorie sélectionnée. Sélectionnez-en une pour consulter les articles.
             </p>
 
-            <p v-else-if="!selectedDepartment.products || !selectedDepartment.products.length">
-                Aucun article disponible dans ce rayonnage.
+            <p v-else-if="!displayedProducts.length">
+                Aucun article disponible pour cette sélection.
             </p>
 
-            <div v-else class="products-grid">
-                <ProductCard v-for="product in selectedDepartment.products" 
-                    :key="product.id" 
+            <div
+                v-else
+                class="products-grid"
+            >
+                <ProductCard
+                    v-for="product in displayedProducts"
+                    :key="product.id"
                     :product="product"
-                    :store="selectedStore" />
+                    :store="selectedStore"
+                />
             </div>
         </section>
     </div>

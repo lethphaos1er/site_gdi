@@ -35,11 +35,11 @@ function addProduct(quantity) {
 
 <template>
     <article class="product-card">
-        <img
-            :src="product.image"
-            :alt="product.name"
-            class="product-card__image"
-        >
+        <img v-if="product.image" :src="product.image" :alt="product.name" class="product-card__image">
+
+        <div v-else class="product-card__image product-card__image--placeholder" aria-hidden="true">
+            🥐
+        </div>
 
         <div class="product-card__content">
             <header class="product-card__header">
@@ -65,34 +65,22 @@ function addProduct(quantity) {
                     }}
                 </p>
 
-                <button
-                    v-if="isTruncated(product.description, 50)"
-                    type="button"
-                    class="product-card__more"
-                    @click="toggleDescription"
-                >
+                <button v-if="isTruncated(product.description, 50)" type="button" class="product-card__more"
+                    @click="toggleDescription">
                     {{ isExpanded ? 'Voir moins ▲' : 'En savoir plus ▼' }}
                 </button>
             </div>
-            
 
-            <p
-                v-if="hasStoreError || isLockedToAnotherStore"
-                class="product-card__warning"
-            >
+
+            <p v-if="hasStoreError || isLockedToAnotherStore" class="product-card__warning">
                 Vous avez déjà des articles du magasin {{ cart.storeName }} dans le panier.
                 Impossible d’ajouter des articles venant d’un autre magasin.
                 Videz le panier pour changer de magasin.
             </p>
 
-            <ProductQuantity
-                :stock="product.stock"
-                :is-action-disabled="isLockedToAnotherStore"
-                @add-product="addProduct"
-            />
-            <p style="display: block; padding: 1rem; border: 3px solid red; background: yellow; color: black;">
-    DEBUG PRODUCT CARD - {{ cart.storeName ?? 'aucun magasin panier' }}
-</p>
+            <ProductQuantity :stock="product.stock" :is-action-disabled="isLockedToAnotherStore"
+                @add-product="addProduct" />
+
         </div>
     </article>
 </template>

@@ -1,108 +1,216 @@
-export default [
+const bakeryCategories = [
     {
-        id: 1,
-        name: "GDI Liège",
-        city: "Liège",
-        logo: "/images/stores/liege.webp",
-        departments: [
+        id: 'pains',
+        slug: 'pains',
+        name: 'Pains',
+        subcategories: [
             {
-                id: 1,
-                name: "Fruits et légumes",
-                products: [
-                    {
-                        id: 1,
-                        name: "Pommes Jonagold",
-                        description: "Pommes fraîches disponibles en magasin.",
-                        price: 2.49,
-                        stock: 24,
-                        image: "/images/products/pommes.webp",
-                    },
-                    {
-                        id: 2,
-                        name: "Carottes",
-                        description: "Carottes croquantes pour vos repas du quotidien.",
-                        price: 1.89,
-                        stock: 36,
-                        image: "/images/products/carottes.webp",
-                    },
-                ],
+                id: 'baguettes',
+                slug: 'baguettes',
+                name: 'Baguettes',
+                products: [],
             },
             {
-                id: 2,
-                name: "Boucherie",
-                products: [
-                    {
-                        id: 3,
-                        name: "Filet de poulet",
-                        description: "Filet de poulet tendre et facile à cuisiner.",
-                        price: 9.9,
-                        stock: 12,
-                        image: "/images/products/filet-poulet.webp",
-                    },
-                ],
-            },
-            {
-                id: 3,
-                name: "Boulangerie",
-                products: [
-                    {
-                        id: 4,
-                        name: "Baguette tradition",
-                        description: "Baguette croustillante cuite du jour.",
-                        price: 1.2,
-                        stock: 18,
-                        image: "/images/products/baguette.webp",
-                    },
-                ],
-            },
-        ],
-    },
-    {
-        id: 2,
-        name: "GDI Namur",
-        city: "Namur",
-        logo: "/images/stores/namur.webp",
-        departments: [
-            {
-                id: 1,
-                name: "Fruits et légumes",
-                products: [
-                    {
-                        id: 5,
-                        name: "Bananes",
-                        description: "Bananes mûres à point.",
-                        price: 1.99,
-                        stock: 30,
-                        image: "/images/products/bananes.webp",
-                    },
-                ],
-            },
-            {
-                id: 2,
-                name: "Boucherie",
-                products: [
-                    {
-                        id: 6,
-                        name: "Haché porc et bœuf",
-                        description: "Haché idéal pour sauces, boulettes et préparations maison.",
-                        price: 8.9,
-                        stock: 10,
-                        image: "/images/products/hache.webp",
-                    },
-                ],
-            },
-            {
-                id: 3,
-                name: "Boulangerie",
+                id: 'pains-speciaux',
+                slug: 'pains-speciaux',
+                name: 'Pains spéciaux',
                 products: [],
             },
         ],
     },
     {
+        id: 'viennoiseries',
+        slug: 'viennoiseries',
+        name: 'Viennoiseries',
+        subcategories: [
+{
+    id: 'croissants',
+    slug: 'croissants',
+    name: 'Croissants',
+    products: [
+        {
+            id: 'croissant-beurre',
+            name: 'Croissant pur beurre',
+            price: 1.25,
+            stock: 20,
+            image: null,
+            description: 'Croissant feuilleté au beurre.',
+        },
+    ],
+},
+            {
+                id: 'pains-au-chocolat',
+                slug: 'pains-au-chocolat',
+                name: 'Pains au chocolat',
+                products: [],
+            },
+        ],
+    },
+    {
+        id: 'patisseries',
+        slug: 'patisseries',
+        name: 'Pâtisseries',
+        subcategories: [
+            {
+                id: 'tartes',
+                slug: 'tartes',
+                name: 'Tartes',
+                products: [],
+            },
+            {
+                id: 'gateaux',
+                slug: 'gateaux',
+                name: 'Gâteaux',
+                products: [],
+            },
+        ],
+    },
+];
+
+const italianCategories = [
+    {
+        id: 'pates',
+        slug: 'pates',
+        name: 'Pâtes',
+        subcategories: [
+            {
+                id: 'pates-fraiches',
+                slug: 'pates-fraiches',
+                name: 'Pâtes fraîches',
+                products: [],
+            },
+            {
+                id: 'pates-seches',
+                slug: 'pates-seches',
+                name: 'Pâtes sèches',
+                products: [],
+            },
+        ],
+    },
+    {
+        id: 'epicerie-italienne',
+        slug: 'epicerie-italienne',
+        name: 'Épicerie italienne',
+        subcategories: [
+            {
+                id: 'sauces',
+                slug: 'sauces',
+                name: 'Sauces',
+                products: [],
+            },
+            {
+                id: 'huiles',
+                slug: 'huiles',
+                name: 'Huiles',
+                products: [],
+            },
+        ],
+    },
+];
+
+const sportCategories = [
+    {
+        id: 'chaussures',
+        slug: 'chaussures',
+        name: 'Chaussures',
+        subcategories: [
+            {
+                id: 'running',
+                slug: 'running',
+                name: 'Running',
+                products: [],
+            },
+            {
+                id: 'football',
+                slug: 'football',
+                name: 'Football',
+                products: [],
+            },
+        ],
+    },
+    {
+        id: 'vetements',
+        slug: 'vetements',
+        name: 'Vêtements',
+        subcategories: [
+            {
+                id: 't-shirts',
+                slug: 't-shirts',
+                name: 'T-shirts',
+                products: [],
+            },
+            {
+                id: 'vestes',
+                slug: 'vestes',
+                name: 'Vestes',
+                products: [],
+            },
+        ],
+    },
+];
+
+export default [
+    {
+        id: 1,
+        slug: 'boulangerie-ciney',
+        name: 'Boulangerie Ciney',
+        city: 'Ciney',
+        type: 'bakery',
+        apiBaseUrl: null,
+        categories: bakeryCategories,
+    },
+    {
+        id: 2,
+        slug: 'boulangerie-dinant',
+        name: 'Boulangerie Dinant',
+        city: 'Dinant',
+        type: 'bakery',
+        apiBaseUrl: null,
+        categories: bakeryCategories,
+    },
+    {
         id: 3,
-        name: "GDI Verviers",
-        city: "Verviers",
-        logo: "/images/stores/verviers.webp",
-        departments: [],
+        slug: 'boulangerie-namur',
+        name: 'Boulangerie Namur',
+        city: 'Namur',
+        type: 'bakery',
+        apiBaseUrl: null,
+        categories: bakeryCategories,
+    },
+    {
+        id: 4,
+        slug: 'boulangerie-jambes',
+        name: 'Boulangerie Jambes',
+        city: 'Jambes',
+        type: 'bakery',
+        apiBaseUrl: null,
+        categories: bakeryCategories,
+    },
+    {
+        id: 5,
+        slug: 'boulangerie-biron',
+        name: 'Boulangerie Biron',
+        city: 'Biron',
+        type: 'bakery',
+        apiBaseUrl: null,
+        categories: bakeryCategories,
+    },
+    {
+        id: 6,
+        slug: 'italien',
+        name: 'Italien',
+        city: null,
+        type: 'italian',
+        apiBaseUrl: null,
+        categories: italianCategories,
+    },
+    {
+        id: 7,
+        slug: 'sport',
+        name: 'Sport',
+        city: null,
+        type: 'sport',
+        apiBaseUrl: null,
+        categories: sportCategories,
     },
 ];

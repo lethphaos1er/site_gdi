@@ -7,6 +7,8 @@
 }
 
 .cart-drawer__toggle {
+    position: relative;
+
     display: flex;
     align-items: center;
     justify-content: center;
@@ -29,7 +31,12 @@
     top: -0.25rem;
     right: -0.25rem;
 
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
     min-width: 1.5rem;
+    min-height: 1.5rem;
     padding: 0.25rem;
 
     border-radius: 999rem;
@@ -39,6 +46,7 @@
 
     font-size: 0.75rem;
     font-weight: 700;
+    line-height: 1;
 }
 
 .cart-drawer__panel {
@@ -90,4 +98,8 @@
 
 .cart-drawer__pay:hover {
     background-color: var(--color-add-cart-bg-hover);
+}
+
+.cart-drawer__toggle {
+    position: relative;
 }

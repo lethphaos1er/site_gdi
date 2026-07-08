@@ -1,8 +1,37 @@
 @media (min-width: 768px) {
     .store-content {
         display: grid;
-        grid-template-columns: 16rem 1fr;
+        grid-template-columns: 18rem 1fr;
         gap: 1.5rem;
+        align-items: start;
+    }
+
+    .store-selector__toggle,
+    .department-menu__toggle {
+        display: none;
+    }
+
+    .store-selector__list,
+    .department-selector {
+        display: flex !important;
+    }
+
+    .store-selector__list {
+        flex-direction: row;
+        flex-wrap: wrap;
+        gap: 1rem;
+
+        margin: 0 0 1rem;
+    }
+
+    .store-selector__button {
+        width: auto;
+        padding: 0;
+
+        border: 0;
+        border-radius: 0;
+
+        background-color: transparent;
     }
 
     .department-wrapper {
@@ -32,7 +61,9 @@
     }
 
     .department-selector__button:hover,
-    .department-selector__button.active {
+    .department-selector__button.active,
+    .subcategory-selector__button:hover,
+    .subcategory-selector__button.active {
         background-color: var(--color-quantity-button-bg);
     }
 
