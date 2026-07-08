@@ -15,7 +15,9 @@ function loadCartItems() {
         return [];
     }
 
-    const hasInvalidItem = items.some((item) => !item.storeId || !item.storeName);
+    const hasInvalidItem = items.some((item) => {
+        return !item.storeId || !item.storeName || !item.orderDate;
+    });
 
     if (hasInvalidItem) {
         localStorage.removeItem(CART_STORAGE_KEY);
@@ -45,6 +47,10 @@ export const useCartStore = defineStore('cart', {
         storeId: (state) => state.items[0]?.storeId ?? null,
 
         storeName: (state) => state.items[0]?.storeName ?? null,
+
+        orderDate: (state) => state.items[0]?.orderDate ?? null,
+
+        hasItems: (state) => state.items.length > 0,
     },
 
     actions: {
@@ -56,8 +62,12 @@ export const useCartStore = defineStore('cart', {
             return !this.storeId || this.storeId === storeId;
         },
 
-        addProduct(product, quantity, store) {
-            if (!this.canUseStore(store.id)) {
+        canUseOrder(storeId, orderDate) {
+            return this.canUseStore(storeId) && (!this.orderDate || this.orderDate === orderDate);
+        },
+
+        addProduct(product, quantity, store, orderDate) {
+            if (!orderDate || !this.canUseOrder(store.id, orderDate)) {
                 return false;
             }
 
@@ -77,6 +87,7 @@ export const useCartStore = defineStore('cart', {
                 quantity,
                 storeId: store.id,
                 storeName: store.name,
+                orderDate,
             });
 
             this.save();

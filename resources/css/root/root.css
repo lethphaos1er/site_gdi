@@ -19,6 +19,8 @@
     --color-delete-button-bg: transparent;
     --color-delete-button-bg-hover: var(--color-danger);
     --color-delete-button-border: var(--color-danger);
+
+    --color-warning-bg: #fff3d6;
     
     /* Text */
     --color-text: #101010;
@@ -28,6 +30,8 @@
     --color-delete-button-text: var(--color-danger);
     --color-delete-button-text-hover: var(--color-text-inverted);
     --color-success: #2f7d32;
+
+    --color-warning-text: #5c3b00;
 
     /* ==========================================================
        END COLORS

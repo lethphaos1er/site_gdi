@@ -1,5 +1,5 @@
 <script setup>
-import { computed, ref } from 'vue';
+import { computed, ref, watch } from 'vue';
 import ProductQuantity from './ProductQuantity.vue';
 import { useCartStore } from '@/stores/cart';
 import { truncate, isTruncated } from '@/tools/tools.js';
@@ -14,30 +14,67 @@ const props = defineProps({
         type: Object,
         required: true,
     },
+
+    orderDate: {
+        type: String,
+        required: true,
+    },
 });
 
 const cart = useCartStore();
 const isExpanded = ref(false);
-const hasStoreError = ref(false);
+const hasOrderError = ref(false);
 
 const isLockedToAnotherStore = computed(() => !cart.canUseStore(props.store.id));
+
+const isLockedToAnotherDate = computed(() => {
+    return Boolean(cart.orderDate) && cart.orderDate !== props.orderDate;
+});
+
+const isActionDisabled = computed(() => {
+    return !props.orderDate || isLockedToAnotherStore.value || isLockedToAnotherDate.value;
+});
+
+const formattedCartOrderDate = computed(() => {
+    if (!cart.orderDate) {
+        return null;
+    }
+
+    return new Intl.DateTimeFormat('fr-BE').format(new Date(cart.orderDate));
+});
+
+watch(
+    () => [props.store.id, props.orderDate, cart.storeId, cart.orderDate],
+    () => {
+        hasOrderError.value = false;
+    }
+);
 
 function toggleDescription() {
     isExpanded.value = !isExpanded.value;
 }
 
 function addProduct(quantity) {
-    const isAdded = cart.addProduct(props.product, quantity, props.store);
+    const isAdded = cart.addProduct(props.product, quantity, props.store, props.orderDate);
 
-    hasStoreError.value = !isAdded;
+    hasOrderError.value = !isAdded;
 }
 </script>
 
 <template>
     <article class="product-card">
-        <img v-if="product.image" :src="product.image" :alt="product.name" class="product-card__image">
+        <img
+            v-if="product.image"
+            :src="product.image"
+            :alt="product.name"
+            class="product-card__image"
+        >
 
-        <div v-else class="product-card__image product-card__image--placeholder" aria-hidden="true">
+        <div
+            v-else
+            class="product-card__image product-card__image--placeholder"
+            aria-hidden="true"
+        >
             🥐
         </div>
 
@@ -65,22 +102,51 @@ function addProduct(quantity) {
                     }}
                 </p>
 
-                <button v-if="isTruncated(product.description, 50)" type="button" class="product-card__more"
-                    @click="toggleDescription">
+                <button
+                    v-if="isTruncated(product.description, 50)"
+                    type="button"
+                    class="product-card__more"
+                    @click="toggleDescription"
+                >
                     {{ isExpanded ? 'Voir moins ▲' : 'En savoir plus ▼' }}
                 </button>
             </div>
 
-
-            <p v-if="hasStoreError || isLockedToAnotherStore" class="product-card__warning">
-                Vous avez déjà des articles du magasin {{ cart.storeName }} dans le panier.
-                Impossible d’ajouter des articles venant d’un autre magasin.
-                Videz le panier pour changer de magasin.
+            <p
+                v-if="isLockedToAnotherStore"
+                class="product-card__warning"
+            >
+                Vous avez déjà des articles dans votre panier pour le magasin
+                {{ cart.storeName }}
+                <template v-if="formattedCartOrderDate">
+                    le {{ formattedCartOrderDate }}
+                </template>.
+                Videz le panier pour commander dans un autre magasin.
             </p>
 
-            <ProductQuantity :stock="product.stock" :is-action-disabled="isLockedToAnotherStore"
-                @add-product="addProduct" />
+            <p
+                v-else-if="isLockedToAnotherDate"
+                class="product-card__warning"
+            >
+                Vous avez déjà des articles dans votre panier pour le magasin
+                {{ cart.storeName }}
+                le {{ formattedCartOrderDate }}.
+                Videz le panier pour choisir une autre date.
+            </p>
 
+            <p
+                v-else-if="hasOrderError"
+                class="product-card__warning"
+            >
+                Impossible d’ajouter cet article avec le magasin ou la date sélectionnée.
+                Vérifiez votre panier avant de continuer.
+            </p>
+
+            <ProductQuantity
+                :stock="product.stock"
+                :is-action-disabled="isActionDisabled"
+                @add-product="addProduct"
+            />
         </div>
     </article>
 </template>

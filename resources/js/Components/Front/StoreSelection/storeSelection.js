@@ -3,3 +3,4 @@
     export { default as StoreContent } from './StoreContent.vue';
     export { default as ProductCard } from './ProductCard.vue';
     export { default as ProductQuantity } from './ProductQuantity.vue';
+    export { default as OrderDateSelector } from './OrderDateSelector.vue';

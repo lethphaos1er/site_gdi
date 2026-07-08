@@ -15,6 +15,10 @@ const props = defineProps({
         type: Object,
         default: null,
     },
+    orderDate: {
+    type: String,
+    required: true,
+    },
 });
 
 const emit = defineEmits([
@@ -170,6 +174,7 @@ watch(
                     :key="product.id"
                     :product="product"
                     :store="selectedStore"
+                    :order-date="orderDate"
                 />
             </div>
         </section>

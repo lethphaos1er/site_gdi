@@ -14,6 +14,10 @@ const props = defineProps({
         type: Boolean,
         default: true,
     },
+    isActionDisabled: {
+        type: Boolean,
+        default: false,
+    },
 });
 
 const emit = defineEmits([
@@ -62,6 +66,10 @@ function normalizeQuantity() {
 }
 
 function addProduct() {
+    if (props.isActionDisabled) {
+        return;
+    }
+
     normalizeQuantity();
 
     if (props.stock > 0 && quantity.value >= 1 && quantity.value <= props.stock) {
@@ -106,7 +114,7 @@ function addProduct() {
             v-if="showActionButton"
             type="button"
             class="product-quantity__add"
-            :disabled="stock <= 0 || quantity < 1 || quantity > stock"
+            :disabled="isActionDisabled || stock <= 0 || quantity < 1 || quantity > stock"
             @click="addProduct"
         >
             <span
