@@ -1,0 +1,37 @@
+.payment-redirect {
+    display: flex;
+    justify-content: center;
+
+    padding: 2rem 1rem;
+}
+
+.payment-redirect__card {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+
+    width: min(100%, 38rem);
+    padding: 1.5rem;
+
+    border: 1px solid currentColor;
+}
+
+.payment-redirect__eyebrow,
+.payment-redirect__title,
+.payment-redirect__text,
+.payment-redirect__notice {
+    margin: 0;
+}
+
+.payment-redirect__eyebrow {
+    font-weight: 700;
+    text-transform: uppercase;
+}
+
+.payment-redirect__title {
+    font-size: 1.75rem;
+}
+
+.payment-redirect__notice {
+    color: var(--color-text-muted);
+}

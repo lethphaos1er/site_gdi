@@ -87,17 +87,26 @@
 }
 
 .cart-drawer__pay {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
     width: 100%;
-    min-height: 3.75rem;
+    min-height: 4.75rem;
+    padding: 1rem;
 
     border: 0;
     border-radius: 0.75rem;
 
-    background-color: var(--color-add-cart-bg);
-    color: var(--color-add-cart-text);
+    background-color: var(--color-success);
+    color: var(--color-text-inverted);
 
-    font-size: 1rem;
+    font: inherit;
     font-weight: 700;
+    text-align: center;
+    text-decoration: none;
+
+    cursor: pointer;
 }
 
 .cart-drawer__pay:hover {

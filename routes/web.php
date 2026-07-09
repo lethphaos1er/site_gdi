@@ -8,6 +8,11 @@ use Inertia\Inertia;
 Route::get('/', [HomeController::class, 'index'])
     ->name('home');
 
+// TODO: move this route into auth + verified middleware when checkout requires customer account.
+Route::get('/checkout/redirect', function () {
+    return Inertia::render('Checkout/Redirect');
+})->name('checkout.redirect');
+
 Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('/dashboard', function () {
         return Inertia::render('Customer/Dashboard');

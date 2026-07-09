@@ -1,20 +1,15 @@
 <script setup>
 import { ref } from 'vue';
+import { Link } from '@inertiajs/vue3';
 import CartItem from './CartItem.vue';
 import OrderSummary from './OrderSummary.vue';
-import CheckoutEntry from './CheckoutEntry.vue';
 import { useCartStore } from '@/stores/cart';
 
 const cart = useCartStore();
 const isOpen = ref(false);
-const showCheckoutEntry = ref(false);
 
 function toggleCart() {
     isOpen.value = !isOpen.value;
-}
-
-function startCheckout() {
-    showCheckoutEntry.value = true;
 }
 </script>
 
@@ -53,22 +48,9 @@ function startCheckout() {
                     :total-price="cart.totalPrice"
                 />
 
-                <button
-                    type="button"
-                    class="cart-drawer__pay"
-                    @click="startCheckout"
-                >
+                <Link href="/checkout/redirect" class="cart-drawer__pay">
                     Payer
-                </button>
-
-                <CheckoutEntry
-                    v-if="showCheckoutEntry"
-                    :has-items="cart.hasItems"
-                    :store-name="cart.storeName"
-                    :order-date="cart.orderDate"
-                    :total-items="cart.totalItems"
-                    :total-price="cart.totalPrice"
-                />
+                </Link>
             </div>
         </div>
     </aside>
