@@ -1,6 +1,7 @@
 <script setup>
 import { ref } from 'vue';
 import CartItem from './CartItem.vue';
+import OrderSummary from './OrderSummary.vue';
 import { useCartStore } from '@/stores/cart';
 
 const cart = useCartStore();
@@ -31,17 +32,12 @@ function toggleCart() {
             </p>
 
             <ul v-else class="cart-drawer__list">
-                <CartItem
-                    v-for="item in cart.items"
-                    :key="item.id"
-                    :item="item"
-                />
+                <CartItem v-for="item in cart.items" :key="item.id" :item="item" />
             </ul>
 
-            <div class="cart-drawer__footer">
-                <p>
-                    Total général : {{ cart.totalPrice }} €
-                </p>
+            <div v-if="cart.hasItems" class="cart-drawer__summary">
+                <OrderSummary :store-name="cart.storeName" :order-date="cart.orderDate" :total-items="cart.totalItems"
+                    :total-price="cart.totalPrice" />
 
                 <button type="button" class="cart-drawer__pay">
                     Payer
