@@ -38,8 +38,8 @@ Route::middleware(['auth', 'verified'])->group(function () {
         ->name('profile.destroy');
 });
 
-Route::middleware(['auth'])
-    ->prefix('backoffice')
+// TODO: restore auth and role middleware when backoffice access control is activated.
+Route::prefix('backoffice')
     ->name('backoffice.')
     ->group(function () {
         Route::get('/stores', function () {
