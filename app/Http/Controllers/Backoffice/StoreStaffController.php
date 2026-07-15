@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Backoffice;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Backoffice\StoreStaffRequest;
+use App\Http\Requests\Backoffice\UpdateStoreStaffRequest;
 use App\Models\Store;
 use App\Models\User;
 use Illuminate\Http\RedirectResponse;
@@ -53,6 +54,27 @@ class StoreStaffController extends Controller
         return back()->with(
             'success',
             'Le membre du personnel a été ajouté.'
+        );
+    }
+
+    public function update(
+        UpdateStoreStaffRequest $request,
+        Store $store,
+        User $user
+    ): RedirectResponse {
+        $isAttached = $store->users()
+            ->whereKey($user->getKey())
+            ->exists();
+
+        abort_unless($isAttached, 404);
+
+        $store->users()->updateExistingPivot($user->id, [
+            'role' => $request->validated('role'),
+        ]);
+
+        return back()->with(
+            'success',
+            'Le rôle du membre du personnel a été modifié.'
         );
     }
 }

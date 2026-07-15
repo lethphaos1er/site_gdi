@@ -6,7 +6,7 @@ use App\Enums\StoreRole;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
 
-class StoreStaffRequest extends FormRequest
+class UpdateStoreStaffRequest extends FormRequest
 {
     public function authorize(): bool
     {
@@ -18,21 +18,7 @@ class StoreStaffRequest extends FormRequest
      */
     public function rules(): array
     {
-        $store = $this->route('store');
-
         return [
-            'user_id' => [
-                'required',
-                'integer',
-                'exists:users,id',
-                Rule::unique('store_user', 'user_id')
-                    ->where(
-                        fn($query) => $query->where(
-                            'store_id',
-                            $store->getKey()
-                        )
-                    ),
-            ],
             'role' => [
                 'required',
                 Rule::enum(StoreRole::class),

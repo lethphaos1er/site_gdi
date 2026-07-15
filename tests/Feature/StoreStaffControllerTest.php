@@ -28,6 +28,11 @@ class StoreStaffControllerTest extends TestCase
             '/test/backoffice/stores/{store}/staff',
             [StoreStaffController::class, 'store']
         );
+
+        Route::middleware('web')->put(
+            '/test/backoffice/stores/{store}/staff/{user}',
+            [StoreStaffController::class, 'update']
+        );
     }
 
     public function test_index_returns_store_staff_ordered_by_name(): void
@@ -122,6 +127,214 @@ class StoreStaffControllerTest extends TestCase
             'store_id' => $store->id,
             'user_id' => $user->id,
             'role' => StoreRole::EMPLOYEE->value,
+        ]);
+    }
+
+    public function test_store_rejects_an_invalid_role(): void
+    {
+        $store = Store::create([
+            'name' => 'Boulangerie Ciney',
+            'slug' => 'boulangerie-ciney',
+            'city' => 'Ciney',
+            'type' => 'bakery',
+            'api_base_url' => null,
+        ]);
+
+        $user = User::factory()->create();
+
+        $response = $this->from(
+            "/test/backoffice/stores/{$store->id}/staff"
+        )->post(
+            "/test/backoffice/stores/{$store->id}/staff",
+            [
+                'user_id' => $user->id,
+                'role' => 'manager',
+            ]
+        );
+
+        $response
+            ->assertRedirect(
+                "/test/backoffice/stores/{$store->id}/staff"
+            )
+            ->assertSessionHasErrors('role');
+
+        $this->assertDatabaseMissing('store_user', [
+            'store_id' => $store->id,
+            'user_id' => $user->id,
+        ]);
+    }
+
+    public function test_store_rejects_an_unknown_user(): void
+    {
+        $store = Store::create([
+            'name' => 'Boulangerie Ciney',
+            'slug' => 'boulangerie-ciney',
+            'city' => 'Ciney',
+            'type' => 'bakery',
+            'api_base_url' => null,
+        ]);
+
+        $response = $this->from(
+            "/test/backoffice/stores/{$store->id}/staff"
+        )->post(
+            "/test/backoffice/stores/{$store->id}/staff",
+            [
+                'user_id' => 999999,
+                'role' => StoreRole::EMPLOYEE->value,
+            ]
+        );
+
+        $response
+            ->assertRedirect(
+                "/test/backoffice/stores/{$store->id}/staff"
+            )
+            ->assertSessionHasErrors('user_id');
+    }
+
+    public function test_store_rejects_a_user_already_attached_to_store(): void
+    {
+        $store = Store::create([
+            'name' => 'Boulangerie Ciney',
+            'slug' => 'boulangerie-ciney',
+            'city' => 'Ciney',
+            'type' => 'bakery',
+            'api_base_url' => null,
+        ]);
+
+        $user = User::factory()->create();
+
+        $store->users()->attach($user->id, [
+            'role' => StoreRole::EMPLOYEE->value,
+        ]);
+
+        $response = $this->from(
+            "/test/backoffice/stores/{$store->id}/staff"
+        )->post(
+            "/test/backoffice/stores/{$store->id}/staff",
+            [
+                'user_id' => $user->id,
+                'role' => StoreRole::OWNER->value,
+            ]
+        );
+
+        $response
+            ->assertRedirect(
+                "/test/backoffice/stores/{$store->id}/staff"
+            )
+            ->assertSessionHasErrors('user_id');
+
+        $this->assertDatabaseHas('store_user', [
+            'store_id' => $store->id,
+            'user_id' => $user->id,
+            'role' => StoreRole::EMPLOYEE->value,
+        ]);
+
+        $this->assertDatabaseCount('store_user', 1);
+    }
+    
+    public function test_update_changes_employee_role_to_owner(): void
+    {
+        $store = Store::create([
+            'name' => 'Boulangerie Ciney',
+            'slug' => 'boulangerie-ciney',
+            'city' => 'Ciney',
+            'type' => 'bakery',
+            'api_base_url' => null,
+        ]);
+
+        $user = User::factory()->create();
+
+        $store->users()->attach($user->id, [
+            'role' => StoreRole::EMPLOYEE->value,
+        ]);
+
+        $response = $this->from(
+            "/test/backoffice/stores/{$store->id}/staff"
+        )->put(
+            "/test/backoffice/stores/{$store->id}/staff/{$user->id}",
+            [
+                'role' => StoreRole::OWNER->value,
+            ]
+        );
+
+        $response
+            ->assertRedirect(
+                "/test/backoffice/stores/{$store->id}/staff"
+            )
+            ->assertSessionHas(
+                'success',
+                'Le rôle du membre du personnel a été modifié.'
+            );
+
+        $this->assertDatabaseHas('store_user', [
+            'store_id' => $store->id,
+            'user_id' => $user->id,
+            'role' => StoreRole::OWNER->value,
+        ]);
+    }
+
+    public function test_update_rejects_an_invalid_role(): void
+    {
+        $store = Store::create([
+            'name' => 'Boulangerie Ciney',
+            'slug' => 'boulangerie-ciney',
+            'city' => 'Ciney',
+            'type' => 'bakery',
+            'api_base_url' => null,
+        ]);
+
+        $user = User::factory()->create();
+
+        $store->users()->attach($user->id, [
+            'role' => StoreRole::EMPLOYEE->value,
+        ]);
+
+        $response = $this->from(
+            "/test/backoffice/stores/{$store->id}/staff"
+        )->put(
+            "/test/backoffice/stores/{$store->id}/staff/{$user->id}",
+            [
+                'role' => 'manager',
+            ]
+        );
+
+        $response
+            ->assertRedirect(
+                "/test/backoffice/stores/{$store->id}/staff"
+            )
+            ->assertSessionHasErrors('role');
+
+        $this->assertDatabaseHas('store_user', [
+            'store_id' => $store->id,
+            'user_id' => $user->id,
+            'role' => StoreRole::EMPLOYEE->value,
+        ]);
+    }
+
+    public function test_update_returns_404_when_user_is_not_attached_to_store(): void
+    {
+        $store = Store::create([
+            'name' => 'Boulangerie Ciney',
+            'slug' => 'boulangerie-ciney',
+            'city' => 'Ciney',
+            'type' => 'bakery',
+            'api_base_url' => null,
+        ]);
+
+        $user = User::factory()->create();
+
+        $response = $this->put(
+            "/test/backoffice/stores/{$store->id}/staff/{$user->id}",
+            [
+                'role' => StoreRole::OWNER->value,
+            ]
+        );
+
+        $response->assertNotFound();
+
+        $this->assertDatabaseMissing('store_user', [
+            'store_id' => $store->id,
+            'user_id' => $user->id,
         ]);
     }
 }
