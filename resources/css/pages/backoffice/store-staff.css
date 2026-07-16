@@ -1,0 +1,52 @@
+.store-staff-page {
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+    padding: 1rem;
+}
+
+.store-staff-section {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.store-staff-list {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+
+.staff-member {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    padding: 1rem;
+    background: white;
+    border: 1px solid #d6d6d6;
+    border-radius: 0.5rem;
+}
+
+.staff-member__identity {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+}
+
+.staff-member__name {
+    font-size: 1rem;
+}
+
+.staff-member__email {
+    overflow-wrap: anywhere;
+}
+
+.staff-member__role {
+    width: fit-content;
+    padding: 0.25rem 0.5rem;
+    border: 1px solid currentcolor;
+    border-radius: 999px;
+}
