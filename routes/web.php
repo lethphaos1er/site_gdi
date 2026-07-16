@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Front\HomeController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\Backoffice\StoreStaffController;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
@@ -51,6 +52,61 @@ Route::prefix('backoffice')
                 'storeId' => $store,
             ]);
         })->name('stores.stock');
+    });
+Route::get(
+    '/stores/{store}/staff',
+    [StoreStaffController::class, 'index']
+)->name('stores.staff.index');
+
+Route::post(
+    '/stores/{store}/staff',
+    [StoreStaffController::class, 'store']
+)->name('stores.staff.store');
+
+Route::put(
+    '/stores/{store}/staff/{user}',
+    [StoreStaffController::class, 'update']
+)->name('stores.staff.update');
+
+Route::delete(
+    '/stores/{store}/staff/{user}',
+    [StoreStaffController::class, 'destroy']
+)->name('stores.staff.destroy');
+require __DIR__ . '/auth.php';
+
+// TODO: restore auth and role middleware when backoffice access control is activated.
+Route::prefix('backoffice')
+    ->name('backoffice.')
+    ->group(function () {
+        Route::get('/stores', function () {
+            return Inertia::render('Backoffice/StoreIndex');
+        })->name('stores.index');
+
+        Route::get('/stores/{store}/stock', function (string $store) {
+            return Inertia::render('Backoffice/StoreStock', [
+                'storeId' => $store,
+            ]);
+        })->name('stores.stock');
+
+        Route::get(
+            '/stores/{store}/staff',
+            [StoreStaffController::class, 'index']
+        )->name('stores.staff.index');
+
+        Route::post(
+            '/stores/{store}/staff',
+            [StoreStaffController::class, 'store']
+        )->name('stores.staff.store');
+
+        Route::put(
+            '/stores/{store}/staff/{user}',
+            [StoreStaffController::class, 'update']
+        )->name('stores.staff.update');
+
+        Route::delete(
+            '/stores/{store}/staff/{user}',
+            [StoreStaffController::class, 'destroy']
+        )->name('stores.staff.destroy');
     });
 
 require __DIR__ . '/auth.php';

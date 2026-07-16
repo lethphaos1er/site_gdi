@@ -108,7 +108,7 @@ class StorePolicyTest extends TestCase
             $this->policy->manageStaff($employee, $this->store)
         );
     }
-    
+
     public function test_laravel_resolves_store_policy_authorizations(): void
     {
         $owner = User::factory()->create();
@@ -135,6 +135,152 @@ class StorePolicyTest extends TestCase
 
         $this->assertFalse(
             Gate::forUser($customer)->allows('view', $this->store)
+        );
+    }
+    public function test_owner_can_create_employee(): void
+    {
+        $owner = User::factory()->create();
+
+        $owner->stores()->attach($this->store->id, [
+            'role' => StoreRole::OWNER->value,
+        ]);
+
+        $this->assertTrue(
+            $this->policy->createEmployee($owner, $this->store)
+        );
+    }
+
+    public function test_employee_cannot_create_employee(): void
+    {
+        $employee = User::factory()->create();
+
+        $employee->stores()->attach($this->store->id, [
+            'role' => StoreRole::EMPLOYEE->value,
+        ]);
+
+        $this->assertFalse(
+            $this->policy->createEmployee($employee, $this->store)
+        );
+    }
+
+    public function test_owner_cannot_update_staff_role(): void
+    {
+        $owner = User::factory()->create();
+
+        $owner->stores()->attach($this->store->id, [
+            'role' => StoreRole::OWNER->value,
+        ]);
+
+        $employee = User::factory()->create();
+
+        $employee->stores()->attach($this->store->id, [
+            'role' => StoreRole::EMPLOYEE->value,
+        ]);
+
+        $this->assertFalse(
+            $this->policy->updateStaffRole(
+                $owner,
+                $this->store,
+                $employee
+            )
+        );
+    }
+
+    public function test_owner_can_remove_employee(): void
+    {
+        $owner = User::factory()->create();
+
+        $owner->stores()->attach($this->store->id, [
+            'role' => StoreRole::OWNER->value,
+        ]);
+
+        $employee = User::factory()->create();
+
+        $employee->stores()->attach($this->store->id, [
+            'role' => StoreRole::EMPLOYEE->value,
+        ]);
+
+        $this->assertTrue(
+            $this->policy->deleteStaff(
+                $owner,
+                $this->store,
+                $employee
+            )
+        );
+    }
+
+    public function test_owner_cannot_remove_another_owner(): void
+    {
+        $owner = User::factory()->create();
+
+        $owner->stores()->attach($this->store->id, [
+            'role' => StoreRole::OWNER->value,
+        ]);
+
+        $otherOwner = User::factory()->create();
+
+        $otherOwner->stores()->attach($this->store->id, [
+            'role' => StoreRole::OWNER->value,
+        ]);
+
+        $this->assertFalse(
+            $this->policy->deleteStaff(
+                $owner,
+                $this->store,
+                $otherOwner
+            )
+        );
+    }
+
+    public function test_owner_cannot_remove_himself(): void
+    {
+        $owner = User::factory()->create();
+
+        $owner->stores()->attach($this->store->id, [
+            'role' => StoreRole::OWNER->value,
+        ]);
+
+        $this->assertFalse(
+            $this->policy->deleteStaff(
+                $owner,
+                $this->store,
+                $owner
+            )
+        );
+    }
+    public function test_admin_is_authorized_for_all_staff_actions_through_gate(): void
+    {
+        $admin = User::factory()->create();
+
+        $admin->forceFill([
+            'is_admin' => true,
+        ])->save();
+
+        $staffMember = User::factory()->create();
+
+        $staffMember->stores()->attach($this->store->id, [
+            'role' => StoreRole::EMPLOYEE->value,
+        ]);
+
+        $this->assertTrue(
+            Gate::forUser($admin)->allows(
+                'createEmployee',
+                $this->store
+            )
+        );
+
+        $this->assertTrue(
+            Gate::forUser($admin)->allows(
+                'updateStaffRole',
+                [$this->store, $staffMember]
+            )
+        );
+
+        $this->assertTrue(
+            Gate::forUser($admin)->allows(
+                'deleteStaff',
+                [$this->store, $staffMember]
+            )
         );
     }
 }
