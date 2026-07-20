@@ -7,8 +7,14 @@ const props = defineProps({
         type: Object,
         required: true,
     },
+
     staff: {
         type: Array,
+        required: true,
+    },
+
+    permissions: {
+        type: Object,
         required: true,
     },
 });
@@ -16,8 +22,13 @@ const props = defineProps({
 const search = ref('');
 const searchResults = ref([]);
 const selectedUserId = ref(null);
+const selectedRole = ref('employee');
+
 const isSearching = ref(false);
 const isAdding = ref(false);
+const updatingMemberId = ref(null);
+const removingMemberId = ref(null);
+
 const searchError = ref('');
 
 async function searchUsers() {
@@ -69,7 +80,7 @@ async function searchUsers() {
     }
 }
 
-function addEmployee() {
+function addStaffMember() {
     if (!selectedUserId.value) {
         return;
     }
@@ -80,7 +91,7 @@ function addEmployee() {
         `/backoffice/stores/${props.store.id}/staff`,
         {
             user_id: selectedUserId.value,
-            role: 'employee',
+            role: selectedRole.value,
         },
         {
             preserveScroll: true,
@@ -89,6 +100,7 @@ function addEmployee() {
                 search.value = '';
                 searchResults.value = [];
                 selectedUserId.value = null;
+                selectedRole.value = 'employee';
             },
 
             onFinish: () => {
@@ -98,7 +110,49 @@ function addEmployee() {
     );
 }
 
-function removeEmployee(member) {
+function updateMemberRole(member, role) {
+    if (
+        !member.permissions.can_update_role
+        || member.role === role
+    ) {
+        return;
+    }
+
+    const roleLabel =
+        role === 'owner'
+            ? 'patron'
+            : 'employé';
+
+    const confirmed = window.confirm(
+        `Modifier le rôle de ${member.name} et le définir comme ${roleLabel} ?`,
+    );
+
+    if (!confirmed) {
+        return;
+    }
+
+    updatingMemberId.value = member.id;
+
+    router.put(
+        `/backoffice/stores/${props.store.id}/staff/${member.id}`,
+        {
+            role,
+        },
+        {
+            preserveScroll: true,
+
+            onFinish: () => {
+                updatingMemberId.value = null;
+            },
+        },
+    );
+}
+
+function removeStaffMember(member) {
+    if (!member.permissions.can_remove) {
+        return;
+    }
+
     const confirmed = window.confirm(
         `Retirer ${member.name} du personnel de ce magasin ?`,
     );
@@ -107,19 +161,33 @@ function removeEmployee(member) {
         return;
     }
 
+    removingMemberId.value = member.id;
+
     router.delete(
         `/backoffice/stores/${props.store.id}/staff/${member.id}`,
         {
             preserveScroll: true,
+
+            onFinish: () => {
+                removingMemberId.value = null;
+            },
         },
     );
+}
+
+function roleLabel(role) {
+    return role === 'owner'
+        ? 'Patron'
+        : 'Employé';
 }
 </script>
 
 <template>
     <main class="store-staff-page">
         <header>
-            <h1>Personnel de {{ store.name }}</h1>
+            <h1>
+                Personnel de {{ store.name }}
+            </h1>
 
             <p>
                 Gérez les personnes autorisées à travailler dans ce magasin.
@@ -128,10 +196,10 @@ function removeEmployee(member) {
 
         <section
             class="store-staff-section"
-            aria-labelledby="add-employee-title"
+            aria-labelledby="add-staff-title"
         >
-            <h2 id="add-employee-title">
-                Ajouter un employé
+            <h2 id="add-staff-title">
+                Ajouter un membre du personnel
             </h2>
 
             <form @submit.prevent="searchUsers">
@@ -157,7 +225,11 @@ function removeEmployee(member) {
                     class="button button--secondary"
                     :disabled="isSearching"
                 >
-                    {{ isSearching ? 'Recherche…' : 'Rechercher' }}
+                    {{
+                        isSearching
+                            ? 'Recherche…'
+                            : 'Rechercher'
+                    }}
                 </button>
             </form>
 
@@ -172,7 +244,9 @@ function removeEmployee(member) {
                 v-if="searchResults.length > 0"
                 aria-live="polite"
             >
-                <h3>Résultats</h3>
+                <h3>
+                    Résultats
+                </h3>
 
                 <ul>
                     <li
@@ -195,19 +269,46 @@ function removeEmployee(member) {
                     </li>
                 </ul>
 
+                <div
+                    v-if="permissions.can_assign_owner"
+                    class="staff-role-selection"
+                >
+                    <label for="new-staff-role">
+                        Rôle dans le magasin
+                    </label>
+
+                    <select
+                        id="new-staff-role"
+                        v-model="selectedRole"
+                        name="role"
+                    >
+                        <option value="employee">
+                            Employé
+                        </option>
+
+                        <option value="owner">
+                            Patron
+                        </option>
+                    </select>
+                </div>
+
                 <button
                     type="button"
                     class="button button--primary"
                     :disabled="!selectedUserId || isAdding"
-                    @click="addEmployee"
+                    @click="addStaffMember"
                 >
-                    {{ isAdding ? 'Ajout…' : 'Ajouter comme employé' }}
+                    {{
+                        isAdding
+                            ? 'Ajout…'
+                            : `Ajouter comme ${roleLabel(selectedRole).toLowerCase()}`
+                    }}
                 </button>
             </div>
 
             <p
                 v-else-if="
-                    search.length >= 2
+                    search.trim().length >= 2
                     && !isSearching
                     && !searchError
                 "
@@ -248,21 +349,73 @@ function removeEmployee(member) {
                     </div>
 
                     <span class="staff-member__role">
-                        {{
-                            member.role === 'owner'
-                                ? 'Patron'
-                                : 'Employé'
-                        }}
+                        {{ roleLabel(member.role) }}
                     </span>
 
-                    <button
-                        v-if="member.role === 'employee'"
-                        type="button"
-                        class="button button--danger"
-                        @click="removeEmployee(member)"
+                    <div
+                        v-if="
+                            member.permissions.can_update_role
+                            || member.permissions.can_remove
+                        "
+                        class="staff-member__actions"
                     >
-                        Retirer du magasin
-                    </button>
+                        <button
+                            v-if="
+                                member.permissions.can_update_role
+                                && member.role === 'employee'
+                            "
+                            type="button"
+                            class="button button--secondary"
+                            :disabled="
+                                updatingMemberId === member.id
+                                || removingMemberId === member.id
+                            "
+                            @click="updateMemberRole(member, 'owner')"
+                        >
+                            {{
+                                updatingMemberId === member.id
+                                    ? 'Modification…'
+                                    : 'Promouvoir patron'
+                            }}
+                        </button>
+
+                        <button
+                            v-if="
+                                member.permissions.can_update_role
+                                && member.role === 'owner'
+                            "
+                            type="button"
+                            class="button button--secondary"
+                            :disabled="
+                                updatingMemberId === member.id
+                                || removingMemberId === member.id
+                            "
+                            @click="updateMemberRole(member, 'employee')"
+                        >
+                            {{
+                                updatingMemberId === member.id
+                                    ? 'Modification…'
+                                    : 'Rétrograder employé'
+                            }}
+                        </button>
+
+                        <button
+                            v-if="member.permissions.can_remove"
+                            type="button"
+                            class="button button--danger"
+                            :disabled="
+                                removingMemberId === member.id
+                                || updatingMemberId === member.id
+                            "
+                            @click="removeStaffMember(member)"
+                        >
+                            {{
+                                removingMemberId === member.id
+                                    ? 'Suppression…'
+                                    : 'Retirer du magasin'
+                            }}
+                        </button>
+                    </div>
                 </li>
             </ul>
 

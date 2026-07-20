@@ -9,6 +9,7 @@ use App\Http\Requests\Backoffice\UpdateStoreStaffRequest;
 use App\Models\Store;
 use App\Models\User;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Validation\ValidationException;
 use Inertia\Inertia;
@@ -16,9 +17,45 @@ use Inertia\Response;
 
 class StoreStaffController extends Controller
 {
-    public function index(Store $store): Response
-    {
+    public function index(
+        Request $request,
+        Store $store
+    ): Response {
         Gate::authorize('manageStaff', $store);
+
+        $authenticatedUser = $request->user();
+
+        $staff = $store->users()
+            ->select([
+                'users.id',
+                'users.name',
+                'users.email',
+            ])
+            ->orderBy('users.name')
+            ->get()
+            ->map(function (User $staffMember) use (
+                $authenticatedUser,
+                $store
+            ): array {
+                return [
+                    'id' => $staffMember->id,
+                    'name' => $staffMember->name,
+                    'email' => $staffMember->email,
+                    'role' => $staffMember->pivot->role,
+
+                    'permissions' => [
+                        'can_update_role' => $authenticatedUser->can(
+                            'updateStaffRole',
+                            [$store, $staffMember]
+                        ),
+
+                        'can_remove' => $authenticatedUser->can(
+                            'deleteStaff',
+                            [$store, $staffMember]
+                        ),
+                    ],
+                ];
+            });
 
         return Inertia::render('Backoffice/StoreStaff', [
             'store' => [
@@ -29,20 +66,11 @@ class StoreStaffController extends Controller
                 'type' => $store->type,
             ],
 
-            'staff' => $store->users()
-                ->select([
-                    'users.id',
-                    'users.name',
-                    'users.email',
-                ])
-                ->orderBy('users.name')
-                ->get()
-                ->map(fn (User $user): array => [
-                    'id' => $user->id,
-                    'name' => $user->name,
-                    'email' => $user->email,
-                    'role' => $user->pivot->role,
-                ]),
+            'staff' => $staff,
+
+            'permissions' => [
+                'can_assign_owner' => $authenticatedUser->isAdmin(),
+            ],
         ]);
     }
 
@@ -133,8 +161,10 @@ class StoreStaffController extends Controller
         );
     }
 
-    private function staffRole(Store $store, User $user): ?string
-    {
+    private function staffRole(
+        Store $store,
+        User $user
+    ): ?string {
         $staffMember = $store->users()
             ->whereKey($user->getKey())
             ->first();
