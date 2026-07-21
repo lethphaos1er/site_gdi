@@ -24,6 +24,18 @@
         margin: 0 0 1rem;
     }
 
+    .store-selector__sublist {
+        display: flex;
+        flex-direction: row;
+        flex-wrap: wrap;
+        gap: 1rem;
+
+        margin: 0 0 1rem;
+        padding: 0;
+
+        list-style: none;
+    }
+
     .store-selector__button {
         width: auto;
         padding: 0;
@@ -47,6 +59,7 @@
     .department-selector {
         flex-direction: column;
         width: auto;
+
         overflow-x: visible;
     }
 
