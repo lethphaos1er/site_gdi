@@ -19,6 +19,7 @@ class Store extends Model
         'email',
         'type',
         'identifier',
+        'owner_name',
         'city',
         'api_base_url',
     ];

@@ -1,7 +1,6 @@
 <script setup>
 import { computed, ref } from 'vue';
 import { Link } from '@inertiajs/vue3';
-import stores from '@/data/stores';
 
 import StockDepartmentNav from '@/Components/Backoffice/stock/StockDepartmentNav.vue';
 import StockProductGrid from '@/Components/Backoffice/stock/StockProductGrid.vue';

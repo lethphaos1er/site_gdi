@@ -12,7 +12,7 @@ defineProps({
 <template>
     <Link
         class="customer-dashboard__card"
-        :href="`/backoffice/stores/${store.id}/stock`"
+        :href="`/backoffice/stores/${store.id}`"
     >
         <h2>
             {{ store.name }}
@@ -23,7 +23,7 @@ defineProps({
         </p>
 
         <p>
-            Gérer le stock
+            Gérer le magasin
         </p>
     </Link>
 </template>

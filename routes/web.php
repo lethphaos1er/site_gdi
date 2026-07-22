@@ -1,7 +1,6 @@
 <?php
 
-use App\Http\Controllers\Backoffice\StoreStaffController;
-use App\Http\Controllers\Backoffice\StoreStaffSearchController;
+use App\Http\Controllers\Backoffice\StoreController;
 use App\Http\Controllers\Front\HomeController;
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
@@ -40,44 +39,30 @@ Route::middleware(['auth', 'verified'])->group(function () {
         ->name('profile.destroy');
 });
 
-// TODO: restore auth and role middleware when backoffice access control is activated.
+// TODO: restore auth and admin middleware when backoffice access control is activated.
 Route::prefix('backoffice')
     ->name('backoffice.')
     ->group(function () {
-        Route::get('/stores', function () {
-            return Inertia::render('Backoffice/StoreIndex');
-        })->name('stores.index');
-
-        Route::get('/stores/{store}/stock', function (string $store) {
-            return Inertia::render('Backoffice/StoreStock', [
-                'storeId' => $store,
-            ]);
-        })->name('stores.stock');
-
-        Route::get(
-            '/stores/{store}/staff',
-            [StoreStaffController::class, 'index']
-        )->name('stores.staff.index');
-
-        Route::get(
-            '/stores/{store}/staff/search',
-            StoreStaffSearchController::class
-        )->name('stores.staff.search');
-
-        Route::post(
-            '/stores/{store}/staff',
-            [StoreStaffController::class, 'store']
-        )->name('stores.staff.store');
 
         Route::put(
-            '/stores/{store}/staff/{user}',
-            [StoreStaffController::class, 'update']
-        )->name('stores.staff.update');
+            '/stores/{store}',
+            [StoreController::class, 'update']
+        )->name('stores.update');
 
-        Route::delete(
-            '/stores/{store}/staff/{user}',
-            [StoreStaffController::class, 'destroy']
-        )->name('stores.staff.destroy');
+        Route::get(
+            '/stores',
+            [StoreController::class, 'index']
+        )->name('stores.index');
+
+        Route::post(
+            '/stores',
+            [StoreController::class, 'store']
+        )->name('stores.store');
+
+        Route::get(
+            '/stores/{store}',
+            [StoreController::class, 'show']
+        )->name('stores.show');
     });
 
 require __DIR__ . '/auth.php';

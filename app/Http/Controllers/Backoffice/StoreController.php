@@ -17,18 +17,35 @@ class StoreController extends Controller
     {
         return Inertia::render('Backoffice/StoreIndex', [
             'stores' => Store::query()
-                ->orderBy('name')
+                ->orderBy('name', 'asc')
                 ->get(),
+        ]);
+    }
+
+    public function show(Store $store): Response
+    {
+        return Inertia::render('Backoffice/StoreShow', [
+            'store' => [
+                'id' => $store->id,
+                'name' => $store->name,
+                'address' => $store->address,
+                'phone' => $store->phone,
+                'email' => $store->email,
+                'type' => $store->type,
+                'identifier' => $store->identifier,
+                'owner_name' => $store->owner_name,
+            ],
         ]);
     }
 
     public function store(Request $request): RedirectResponse
     {
         $validated = $request->validate([
-            'name' => ['required', 'string', 'max:255'],
-            'address' => ['required', 'string', 'max:255'],
+            'name' => ['required', 'string', 'max:80'],
+            'address' => ['required', 'string', 'max:80'],
             'phone' => ['required', 'string', 'max:30'],
             'email' => ['required', 'email', 'max:255'],
+            'owner_name' => ['nullable', 'string', 'max:80'],
             'type' => [
                 'required',
                 Rule::in([
@@ -52,5 +69,41 @@ class StoreController extends Controller
 
         return redirect()
             ->route('backoffice.stores.index');
+    }
+
+    public function update(
+        Request $request,
+        Store $store
+    ): RedirectResponse {
+        $validated = $request->validate([
+            'name' => ['required', 'string', 'max:80'],
+            'address' => ['required', 'string', 'max:80'],
+            'phone' => ['required', 'string', 'max:30'],
+            'email' => ['required', 'email', 'max:255'],
+            'owner_name' => ['nullable', 'string', 'max:80'],
+            'type' => [
+                'required',
+                Rule::in([
+                    'bakery',
+                    'italian',
+                    'sport',
+                ]),
+            ],
+            'identifier' => [
+                'required',
+                'string',
+                'size:10',
+                'alpha_num',
+                Rule::unique('stores', 'identifier')
+                    ->ignore($store->id),
+            ],
+        ]);
+
+        $validated['slug'] = Str::slug($validated['name']);
+
+        $store->update($validated);
+
+        return redirect()
+            ->route('backoffice.stores.show', $store);
     }
 }

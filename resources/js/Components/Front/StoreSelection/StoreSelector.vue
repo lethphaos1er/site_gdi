@@ -90,44 +90,23 @@ function handleStoreSelection(store) {
 
 <template>
     <div class="store-selector">
-        <button
-            type="button"
-            class="store-selector__toggle"
-            :aria-expanded="isStoreMenuOpen"
-            aria-controls="store-selector-menu"
-            @click="toggleStoreMenu"
-        >
+        <button type="button" class="store-selector__toggle" :aria-expanded="isStoreMenuOpen"
+            aria-controls="store-selector-menu" @click="toggleStoreMenu">
             <span aria-hidden="true">☰</span>
             <span>{{ selectedStore?.name ?? 'Sélectionnez un magasin' }}</span>
         </button>
 
-        <p
-            v-if="cart.storeName"
-            class="store-selector__notice"
-        >
+        <p v-if="cart.storeName" class="store-selector__notice">
             Panier en cours chez {{ cart.storeName }}. Videz le panier pour changer de magasin.
         </p>
 
-        <div
-            v-show="isStoreMenuOpen"
-            id="store-selector-menu"
-            class="store-selector__menu"
-        >
+        <div id="store-selector-menu" class="store-selector__menu"
+            :class="{ 'store-selector__menu--open': isStoreMenuOpen }">
             <ul class="store-selector__list">
-                <li
-                    v-for="type in storeTypes"
-                    :key="type.value"
-                    class="store-selector__item"
-                >
-                    <button
-                        type="button"
-                        class="store-selector__button"
-                        :class="{
-                            active: selectedType === type.value,
-                        }"
-                        :disabled="isTypeDisabled(type.value)"
-                        @click="handleTypeSelection(type.value)"
-                    >
+                <li v-for="type in storeTypes" :key="type.value" class="store-selector__item">
+                    <button type="button" class="store-selector__button" :class="{
+                        active: selectedType === type.value,
+                    }" :disabled="isTypeDisabled(type.value)" @click="handleTypeSelection(type.value)">
                         {{ type.label }}
 
                         <span v-if="isTypeDisabled(type.value)">
@@ -137,24 +116,11 @@ function handleStoreSelection(store) {
                 </li>
             </ul>
 
-            <ul
-                v-if="selectedType === 'bakery'"
-                class="store-selector__sublist"
-            >
-                <li
-                    v-for="store in bakeryStores"
-                    :key="store.id"
-                    class="store-selector__item"
-                >
-                    <button
-                        type="button"
-                        class="store-selector__button store-selector__button--store"
-                        :class="{
-                            active: selectedStore && selectedStore.id === store.id,
-                        }"
-                        :disabled="isStoreDisabled(store)"
-                        @click="handleStoreSelection(store)"
-                    >
+            <ul v-if="selectedType === 'bakery'" class="store-selector__sublist">
+                <li v-for="store in bakeryStores" :key="store.id" class="store-selector__item">
+                    <button type="button" class="store-selector__button store-selector__button--store" :class="{
+                        active: selectedStore && selectedStore.id === store.id,
+                    }" :disabled="isStoreDisabled(store)" @click="handleStoreSelection(store)">
                         {{ store.city ?? store.name }}
 
                         <span v-if="isStoreDisabled(store)">

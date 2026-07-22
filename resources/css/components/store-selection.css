@@ -56,6 +56,14 @@
     list-style: none;
 }
 
+.store-selector__menu {
+    display: none;
+}
+
+.store-selector__menu--open {
+    display: block;
+}
+
 .store-selector__button:disabled {
     opacity: 0.5;
     cursor: not-allowed;

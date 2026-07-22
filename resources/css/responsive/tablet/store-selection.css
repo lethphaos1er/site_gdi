@@ -89,4 +89,7 @@
     .product-card {
         margin-bottom: 0;
     }
+    .store-selector__menu {
+        display: block;
+    }
 }
