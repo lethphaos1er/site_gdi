@@ -106,4 +106,12 @@ class StoreController extends Controller
         return redirect()
             ->route('backoffice.stores.show', $store);
     }
+    
+    public function destroy(Store $store): RedirectResponse
+    {
+        $store->delete();
+
+        return redirect()
+            ->route('backoffice.stores.index');
+    }
 }

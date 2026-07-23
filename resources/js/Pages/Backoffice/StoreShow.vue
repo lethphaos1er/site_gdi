@@ -1,5 +1,5 @@
 <script setup>
-import { Link, useForm } from '@inertiajs/vue3';
+import { Link, router, useForm } from '@inertiajs/vue3';
 
 const props = defineProps({
     store: {
@@ -23,15 +23,26 @@ function submit() {
         preserveScroll: true,
     });
 }
+
+function destroyStore() {
+    const confirmed = window.confirm(
+        `Supprimer définitivement le magasin "${props.store.name}" ?`
+    );
+
+    if (!confirmed) {
+        return;
+    }
+
+    router.delete(
+        route('backoffice.stores.destroy', props.store.id)
+    );
+}
 </script>
 
 <template>
     <main class="customer-dashboard">
         <p>
-            <Link
-                class="button button--secondary"
-                href="/backoffice/stores"
-            >
+            <Link class="button button--secondary" href="/backoffice/stores">
                 Retour aux magasins
             </Link>
         </p>
@@ -53,10 +64,7 @@ function submit() {
                 </h2>
             </header>
 
-            <form
-                class="store-create-form"
-                @submit.prevent="submit"
-            >
+            <form class="store-create-form" @submit.prevent="submit">
                 <div class="store-create-form__field">
                     <label for="store-name">
                         Nom
@@ -70,10 +78,7 @@ function submit() {
                         required
                     >
 
-                    <p
-                        v-if="form.errors.name"
-                        class="store-create-form__error"
-                    >
+                    <p v-if="form.errors.name" class="store-create-form__error">
                         {{ form.errors.name }}
                     </p>
                 </div>
@@ -91,10 +96,7 @@ function submit() {
                         required
                     >
 
-                    <p
-                        v-if="form.errors.address"
-                        class="store-create-form__error"
-                    >
+                    <p v-if="form.errors.address" class="store-create-form__error">
                         {{ form.errors.address }}
                     </p>
                 </div>
@@ -112,10 +114,7 @@ function submit() {
                         required
                     >
 
-                    <p
-                        v-if="form.errors.phone"
-                        class="store-create-form__error"
-                    >
+                    <p v-if="form.errors.phone" class="store-create-form__error">
                         {{ form.errors.phone }}
                     </p>
                 </div>
@@ -132,10 +131,7 @@ function submit() {
                         required
                     >
 
-                    <p
-                        v-if="form.errors.email"
-                        class="store-create-form__error"
-                    >
+                    <p v-if="form.errors.email" class="store-create-form__error">
                         {{ form.errors.email }}
                     </p>
                 </div>
@@ -145,11 +141,7 @@ function submit() {
                         Type de magasin
                     </label>
 
-                    <select
-                        id="store-type"
-                        v-model="form.type"
-                        required
-                    >
+                    <select id="store-type" v-model="form.type" required>
                         <option value="bakery">
                             Boulangerie
                         </option>
@@ -163,10 +155,7 @@ function submit() {
                         </option>
                     </select>
 
-                    <p
-                        v-if="form.errors.type"
-                        class="store-create-form__error"
-                    >
+                    <p v-if="form.errors.type" class="store-create-form__error">
                         {{ form.errors.type }}
                     </p>
                 </div>
@@ -190,10 +179,7 @@ function submit() {
                         10 caractères alphanumériques.
                     </p>
 
-                    <p
-                        v-if="form.errors.identifier"
-                        class="store-create-form__error"
-                    >
+                    <p v-if="form.errors.identifier" class="store-create-form__error">
                         {{ form.errors.identifier }}
                     </p>
                 </div>
@@ -210,10 +196,7 @@ function submit() {
                         maxlength="80"
                     >
 
-                    <p
-                        v-if="form.errors.owner_name"
-                        class="store-create-form__error"
-                    >
+                    <p v-if="form.errors.owner_name" class="store-create-form__error">
                         {{ form.errors.owner_name }}
                     </p>
                 </div>
@@ -228,6 +211,26 @@ function submit() {
                     </button>
                 </div>
             </form>
+        </section>
+
+        <section class="store-create">
+            <header class="store-create__header">
+                <h2>
+                    Supprimer le magasin
+                </h2>
+            </header>
+
+            <p>
+                Cette action supprime définitivement ce point de vente.
+            </p>
+
+            <button
+                type="button"
+                class="button"
+                @click="destroyStore"
+            >
+                Supprimer le magasin
+            </button>
         </section>
     </main>
 </template>

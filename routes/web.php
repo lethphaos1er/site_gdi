@@ -63,6 +63,11 @@ Route::prefix('backoffice')
             '/stores/{store}',
             [StoreController::class, 'show']
         )->name('stores.show');
+
+        Route::delete(
+            '/stores/{store}',
+            [StoreController::class, 'destroy']
+        )->name('stores.destroy');
     });
 
 require __DIR__ . '/auth.php';
