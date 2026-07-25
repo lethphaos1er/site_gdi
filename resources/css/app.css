@@ -3,7 +3,6 @@
 @import "./layout/layout.css";
 @import "./components/components.css";
 @import "./pages/pages.css";
-@import "./utilities/utilities.css";
 @import "./responsive/responsive.css";
 
 @tailwind base;

@@ -16,6 +16,7 @@ const form = useForm({
     type: props.store.type ?? '',
     identifier: props.store.identifier ?? '',
     owner_name: props.store.owner_name ?? '',
+    city: props.store.city ?? '',
 });
 
 function submit() {
@@ -70,13 +71,7 @@ function destroyStore() {
                         Nom
                     </label>
 
-                    <input
-                        id="store-name"
-                        v-model="form.name"
-                        type="text"
-                        maxlength="80"
-                        required
-                    >
+                    <input id="store-name" v-model="form.name" type="text" maxlength="80" required>
 
                     <p v-if="form.errors.name" class="store-create-form__error">
                         {{ form.errors.name }}
@@ -88,13 +83,7 @@ function destroyStore() {
                         Adresse
                     </label>
 
-                    <input
-                        id="store-address"
-                        v-model="form.address"
-                        type="text"
-                        maxlength="80"
-                        required
-                    >
+                    <input id="store-address" v-model="form.address" type="text" maxlength="80" required>
 
                     <p v-if="form.errors.address" class="store-create-form__error">
                         {{ form.errors.address }}
@@ -102,17 +91,25 @@ function destroyStore() {
                 </div>
 
                 <div class="store-create-form__field">
+                    <label for="store-city">
+                        Ville
+                    </label>
+
+                    <input id="store-city" v-model="form.city" type="text" maxlength="80" autocomplete="address-level2"
+                        required>
+
+                    <p v-if="form.errors.city" class="store-create-form__error">
+                        {{ form.errors.city }}
+                    </p>
+                </div>
+
+
+                <div class="store-create-form__field">
                     <label for="store-phone">
                         GSM
                     </label>
 
-                    <input
-                        id="store-phone"
-                        v-model="form.phone"
-                        type="tel"
-                        maxlength="30"
-                        required
-                    >
+                    <input id="store-phone" v-model="form.phone" type="tel" maxlength="30" required>
 
                     <p v-if="form.errors.phone" class="store-create-form__error">
                         {{ form.errors.phone }}
@@ -124,12 +121,7 @@ function destroyStore() {
                         E-mail
                     </label>
 
-                    <input
-                        id="store-email"
-                        v-model="form.email"
-                        type="email"
-                        required
-                    >
+                    <input id="store-email" v-model="form.email" type="email" required>
 
                     <p v-if="form.errors.email" class="store-create-form__error">
                         {{ form.errors.email }}
@@ -165,15 +157,8 @@ function destroyStore() {
                         Identifiant
                     </label>
 
-                    <input
-                        id="store-identifier"
-                        v-model="form.identifier"
-                        type="text"
-                        minlength="10"
-                        maxlength="10"
-                        pattern="[A-Za-z0-9]{10}"
-                        required
-                    >
+                    <input id="store-identifier" v-model="form.identifier" type="text" minlength="10" maxlength="10"
+                        pattern="[A-Za-z0-9]{10}" required>
 
                     <p class="store-create-form__help">
                         10 caractères alphanumériques.
@@ -189,12 +174,7 @@ function destroyStore() {
                         Patron
                     </label>
 
-                    <input
-                        id="store-owner-name"
-                        v-model="form.owner_name"
-                        type="text"
-                        maxlength="80"
-                    >
+                    <input id="store-owner-name" v-model="form.owner_name" type="text" maxlength="80">
 
                     <p v-if="form.errors.owner_name" class="store-create-form__error">
                         {{ form.errors.owner_name }}
@@ -202,11 +182,7 @@ function destroyStore() {
                 </div>
 
                 <div class="store-create-form__actions">
-                    <button
-                        type="submit"
-                        class="button"
-                        :disabled="form.processing"
-                    >
+                    <button type="submit" class="button" :disabled="form.processing">
                         {{ form.processing ? 'Sauvegarde…' : 'Sauvegarder' }}
                     </button>
                 </div>
@@ -224,11 +200,7 @@ function destroyStore() {
                 Cette action supprime définitivement ce point de vente.
             </p>
 
-            <button
-                type="button"
-                class="button"
-                @click="destroyStore"
-            >
+            <button type="button" class="button" @click="destroyStore">
                 Supprimer le magasin
             </button>
         </section>

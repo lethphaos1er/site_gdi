@@ -34,6 +34,7 @@ class StoreController extends Controller
                 'type' => $store->type,
                 'identifier' => $store->identifier,
                 'owner_name' => $store->owner_name,
+                'city' => $store->city,
             ],
         ]);
     }
@@ -46,6 +47,7 @@ class StoreController extends Controller
             'phone' => ['required', 'string', 'max:30'],
             'email' => ['required', 'email', 'max:255'],
             'owner_name' => ['nullable', 'string', 'max:80'],
+            'city' => ['required', 'string', 'max:80'],
             'type' => [
                 'required',
                 Rule::in([
@@ -81,6 +83,7 @@ class StoreController extends Controller
             'phone' => ['required', 'string', 'max:30'],
             'email' => ['required', 'email', 'max:255'],
             'owner_name' => ['nullable', 'string', 'max:80'],
+            'city' => ['required', 'string', 'max:80'],
             'type' => [
                 'required',
                 Rule::in([
