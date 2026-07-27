@@ -13,6 +13,7 @@ const form = useForm({
     address: props.store.address ?? '',
     phone: props.store.phone ?? '',
     email: props.store.email ?? '',
+    api_base_url: props.store.api_base_url ?? '',
     type: props.store.type ?? '',
     identifier: props.store.identifier ?? '',
     owner_name: props.store.owner_name ?? '',
@@ -125,6 +126,18 @@ function destroyStore() {
 
                     <p v-if="form.errors.email" class="store-create-form__error">
                         {{ form.errors.email }}
+                    </p>
+                </div>
+
+                <div class="store-create-form__field">
+                    <label for="store-api-base-url">
+                        URL de l’API
+                    </label>
+
+                    <input id="store-api-base-url" v-model="form.api_base_url" type="url" maxlength="255" required>
+
+                    <p v-if="form.errors.api_base_url" class="store-create-form__error">
+                        {{ form.errors.api_base_url }}
                     </p>
                 </div>
 

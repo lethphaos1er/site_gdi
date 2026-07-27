@@ -8,6 +8,7 @@ const form = useForm({
     address: '',
     phone: '',
     email: '',
+    api_base_url: '',
     type: '',
     identifier: '',
     owner_name: '',
@@ -84,6 +85,18 @@ function submit() {
 
             <p v-if="form.errors.email" class="store-create-form__error">
                 {{ form.errors.email }}
+            </p>
+        </div>
+
+        <div class="store-create-form__field">
+            <label for="store-api-base-url">
+                URL de l’API
+            </label>
+
+            <input id="store-api-base-url" v-model="form.api_base_url" type="url" autocomplete="url" required>
+
+            <p v-if="form.errors.api_base_url" class="store-create-form__error">
+                {{ form.errors.api_base_url }}
             </p>
         </div>
 

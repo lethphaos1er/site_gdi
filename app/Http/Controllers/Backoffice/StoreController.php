@@ -33,6 +33,7 @@ class StoreController extends Controller
                 'email' => $store->email,
                 'type' => $store->type,
                 'identifier' => $store->identifier,
+                'api_base_url' => $store->api_base_url,
                 'owner_name' => $store->owner_name,
                 'city' => $store->city,
             ],
@@ -46,6 +47,7 @@ class StoreController extends Controller
             'address' => ['required', 'string', 'max:80'],
             'phone' => ['required', 'string', 'max:30'],
             'email' => ['required', 'email', 'max:255'],
+            'api_base_url' => ['required', 'url', 'max:255'],
             'owner_name' => ['nullable', 'string', 'max:80'],
             'city' => ['required', 'string', 'max:80'],
             'type' => [
@@ -82,6 +84,7 @@ class StoreController extends Controller
             'address' => ['required', 'string', 'max:80'],
             'phone' => ['required', 'string', 'max:30'],
             'email' => ['required', 'email', 'max:255'],
+            'api_base_url' => ['required', 'url', 'max:255'],
             'owner_name' => ['nullable', 'string', 'max:80'],
             'city' => ['required', 'string', 'max:80'],
             'type' => [
