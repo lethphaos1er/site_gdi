@@ -21,9 +21,7 @@ const form = useForm({
 });
 
 function submit() {
-    form.put(route('backoffice.stores.update', props.store.id), {
-        preserveScroll: true,
-    });
+    form.put(`/backoffice/stores/${props.store.id}`);
 }
 
 function destroyStore() {
@@ -36,7 +34,7 @@ function destroyStore() {
     }
 
     router.delete(
-        route('backoffice.stores.destroy', props.store.id)
+        `/backoffice/stores/${props.store.id}`
     );
 }
 </script>
@@ -134,7 +132,7 @@ function destroyStore() {
                         URL de l’API
                     </label>
 
-                    <input id="store-api-base-url" v-model="form.api_base_url" type="url" maxlength="255" required>
+                    <input id="store-api-base-url" v-model="form.api_base_url" type="url" maxlength="255">
 
                     <p v-if="form.errors.api_base_url" class="store-create-form__error">
                         {{ form.errors.api_base_url }}

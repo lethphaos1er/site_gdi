@@ -16,7 +16,7 @@ const form = useForm({
 });
 
 function submit() {
-    form.post(route('backoffice.stores.store'), {
+    form.post('/backoffice/stores', {
         preserveScroll: true,
         onSuccess: () => {
             form.reset();
@@ -93,7 +93,7 @@ function submit() {
                 URL de l’API
             </label>
 
-            <input id="store-api-base-url" v-model="form.api_base_url" type="url" autocomplete="url" required>
+            <input id="store-api-base-url" v-model="form.api_base_url" type="url" autocomplete="url" nullable>
 
             <p v-if="form.errors.api_base_url" class="store-create-form__error">
                 {{ form.errors.api_base_url }}

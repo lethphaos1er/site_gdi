@@ -1,6 +1,5 @@
 <script setup>
 import { ref } from 'vue';
-import stores from '@/data/stores';
 import CartDrawer from '@/Components/Front/cart/CartDrawer.vue';
 import { useCartStore } from '@/stores/cart';
 
@@ -10,6 +9,13 @@ import {
     StoreContent,
     OrderDateSelector,
 } from '@/Components/Front/StoreSelection/StoreSelection.js';
+
+defineProps({
+    stores: {
+        type: Array,
+        required: true,
+    },
+});
 
 function getTodayDate() {
     const today = new Date();

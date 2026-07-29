@@ -47,7 +47,7 @@ class StoreController extends Controller
             'address' => ['required', 'string', 'max:80'],
             'phone' => ['required', 'string', 'max:30'],
             'email' => ['required', 'email', 'max:255'],
-            'api_base_url' => ['required', 'url', 'max:255'],
+            'api_base_url' => ['nullable', 'url', 'max:255'],
             'owner_name' => ['nullable', 'string', 'max:80'],
             'city' => ['required', 'string', 'max:80'],
             'type' => [
@@ -84,7 +84,7 @@ class StoreController extends Controller
             'address' => ['required', 'string', 'max:80'],
             'phone' => ['required', 'string', 'max:30'],
             'email' => ['required', 'email', 'max:255'],
-            'api_base_url' => ['required', 'url', 'max:255'],
+            'api_base_url' => ['nullable', 'url', 'max:255'],
             'owner_name' => ['nullable', 'string', 'max:80'],
             'city' => ['required', 'string', 'max:80'],
             'type' => [
