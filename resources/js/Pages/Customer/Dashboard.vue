@@ -3,7 +3,7 @@ import { Link } from '@inertiajs/vue3';
 </script>
 
 <template>
-    <main class="customer-dashboard">
+    <main class="page-container customer-dashboard">
         <h1>Mon compte</h1>
 
         <nav

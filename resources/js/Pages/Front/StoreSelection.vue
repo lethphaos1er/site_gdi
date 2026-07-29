@@ -48,7 +48,7 @@ function selectSubcategory(subcategory) {
 </script>
 
 <template>
-    <main class="store-page">
+    <main class="page-container store-page">
         <StoreHeader />
 
         <StoreSelector

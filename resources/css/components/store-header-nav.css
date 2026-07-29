@@ -1,11 +1,11 @@
 .store-header-nav {
-    margin-top: 1.5rem;
+    margin-top: var(--space-5);
 }
 
 .store-header-nav__list {
     display: flex;
     flex-wrap: wrap;
-    gap: 1rem;
+    gap: var(--space-4);
 
     margin: 0;
     padding: 0;
@@ -18,8 +18,14 @@
     display: inline-flex;
     align-items: center;
 
-    padding: 0.5rem 1rem;
+    padding: var(--space-2) var(--space-4);
+
+    color: var(--color-text);
 
     text-decoration: none;
     cursor: pointer;
+
+    transition:
+        background-color var(--transition-fast),
+        color var(--transition-fast);
 }

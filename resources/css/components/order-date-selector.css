@@ -1,9 +1,9 @@
 .order-date-selector__warning {
-    margin: 1rem 0 0;
-    padding: 0.75rem 1rem;
-    border-radius: 0.75rem;
+    margin: var(--space-4) 0 0;
+    padding: var(--space-3) var(--space-4);
+    border-radius: var(--border-radius-large);
     background-color: var(--color-warning-bg);
     color: var(--color-warning-text);
-    font-weight: 700;
-    line-height: 1.4;
+    font-weight: var(--font-weight-bold);
+    line-height: var(--line-height-relaxed);
 }

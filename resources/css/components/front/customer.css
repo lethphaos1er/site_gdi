@@ -1,29 +1,22 @@
-.customer-dashboard,
-.customer-orders,
-.order-detail {
-    width: min(100%, 75rem);
-    min-height: 100vh;
-    margin-inline: auto;
-    padding: 1rem;
-}
-
 .customer-dashboard h1,
 .customer-orders h1,
 .order-detail h1 {
-    margin: 0 0 1.5rem;
+    margin: 0 0 var(--space-5);
 }
 
 .customer-dashboard__nav {
     display: grid;
-    gap: 1rem;
+    gap: var(--space-4);
 }
 
 .customer-dashboard__card,
 .customer-orders__item {
     display: block;
-    padding: 1rem;
-    border: 1px solid currentColor;
-    border-radius: 0.75rem;
+    padding: var(--space-4);
+
+    border: var(--border-width) solid var(--color-border);
+    border-radius: var(--border-radius-large);
+
     color: inherit;
     text-decoration: none;
 }
@@ -35,12 +28,12 @@
 
 .customer-dashboard__card:focus-visible,
 .customer-orders__item:focus-visible {
-    outline: 2px solid currentColor;
-    outline-offset: 0.2rem;
+    outline: var(--border-width) solid var(--color-focus);
+    outline-offset: var(--space-1);
 }
 
 .customer-dashboard__card h2 {
-    margin: 0 0 0.5rem;
+    margin: 0 0 var(--space-2);
 }
 
 .customer-dashboard__card p {
@@ -49,9 +42,11 @@
 
 .customer-orders__list {
     display: grid;
-    gap: 0.75rem;
+    gap: var(--space-3);
+
     margin: 0;
     padding: 0;
+
     list-style: none;
 }
 
@@ -59,23 +54,26 @@
     display: flex;
     align-items: center;
     justify-content: space-between;
-    gap: 1rem;
+    gap: var(--space-4);
 }
 
 .order-detail p {
-    margin: 0 0 0.75rem;
+    margin: 0 0 var(--space-3);
 }
 
 .order-detail__table {
     width: 100%;
-    margin-top: 1.5rem;
+    margin-top: var(--space-5);
+
     border-collapse: collapse;
 }
 
 .order-detail__table th,
 .order-detail__table td {
-    padding: 0.75rem;
-    border-bottom: 1px solid currentColor;
+    padding: var(--space-3);
+
+    border-bottom: var(--border-width) solid var(--color-border);
+
     text-align: left;
 }
 
@@ -87,12 +85,13 @@
 }
 
 .order-detail__table tfoot {
-    border-top: 2px solid currentColor;
-    font-weight: 700;
+    border-top: var(--border-width) solid var(--color-border);
+
+    font-weight: var(--font-weight-bold);
 }
 
 .order-detail__table tfoot th {
-    padding-top: 1rem;
+    padding-top: var(--space-4);
 }
 
 @media (min-width: 768px) {

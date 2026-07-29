@@ -1,7 +1,7 @@
 @media (min-width: 768px) {
     .cart-drawer {
-        right: 1.5rem;
-        bottom: 1.5rem;
+        right: var(--space-5);
+        bottom: var(--space-5);
         left: auto;
 
         width: min(24rem, calc(100vw - 3rem));

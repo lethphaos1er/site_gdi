@@ -1,20 +1,20 @@
 .backoffice-page__header {
-    margin-bottom: 1.5rem;
+    margin-bottom: var(--space-5);
 }
 
 .backoffice-page__back {
-    margin-bottom: 1rem;
+    margin-bottom: var(--space-4);
 }
 
 .backoffice-store-grid__items {
     display: flex;
     flex-direction: column;
-    gap: 1.5rem;
+    gap: var(--space-5);
 }
 
 .backoffice-stock-actions {
     display: flex;
     justify-content: center;
 
-    margin-top: 1rem;
+    margin-top: var(--space-4);
 }

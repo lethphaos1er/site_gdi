@@ -40,7 +40,7 @@ function destroyStore() {
 </script>
 
 <template>
-    <main class="customer-dashboard">
+    <main class="page-containercustomer-dashboard">
         <p>
             <Link class="button button--secondary" href="/backoffice/stores">
                 Retour aux magasins

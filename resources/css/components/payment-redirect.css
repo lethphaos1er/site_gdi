@@ -2,18 +2,21 @@
     display: flex;
     justify-content: center;
 
-    padding: 2rem 1rem;
+    padding: var(--space-6) var(--space-4);
 }
 
 .payment-redirect__card {
     display: flex;
     flex-direction: column;
-    gap: 1rem;
+    gap: var(--space-4);
 
     width: min(100%, 38rem);
-    padding: 1.5rem;
+    padding: var(--space-5);
 
-    border: 1px solid currentColor;
+    border: var(--border-width) solid var(--color-border);
+    border-radius: var(--border-radius-large);
+
+    background-color: var(--color-surface);
 }
 
 .payment-redirect__eyebrow,
@@ -24,12 +27,12 @@
 }
 
 .payment-redirect__eyebrow {
-    font-weight: 700;
+    font-weight: var(--font-weight-bold);
     text-transform: uppercase;
 }
 
 .payment-redirect__title {
-    font-size: 1.75rem;
+    font-size: var(--font-size-title);
 }
 
 .payment-redirect__notice {
