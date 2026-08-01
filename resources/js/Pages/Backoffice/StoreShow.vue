@@ -1,5 +1,6 @@
 <script setup>
 import { Link, router, useForm } from '@inertiajs/vue3';
+import StoreHeader from '@/Components/Front/StoreSelection/StoreHeader.vue';
 
 const props = defineProps({
     store: {
@@ -40,22 +41,24 @@ function destroyStore() {
 </script>
 
 <template>
-    <main class="page-containercustomer-dashboard">
+    <StoreHeader :store-name="store.name" :store-city="store.city" />
+
+    <main class="page-container customer-dashboard">
         <p>
             <Link class="button button--secondary" href="/backoffice/stores">
                 Retour aux magasins
             </Link>
         </p>
 
-        <header>
-            <h1>
+        <section aria-labelledby="store-title">
+            <h1 id="store-title">
                 {{ store.name }}
             </h1>
 
             <p>
                 Gestion du point de vente
             </p>
-        </header>
+        </section>
 
         <section class="store-create">
             <header class="store-create__header">

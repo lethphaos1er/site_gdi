@@ -1,14 +1,31 @@
 <script setup>
 import StoreHeaderNav from './StoreHeaderNav.vue';
+
+defineProps({
+    storeName: {
+        type: String,
+        default: '',
+    },
+    storeCity: {
+        type: String,
+        default: '',
+    },
+});
 </script>
 
 <template>
     <header class="store-header">
-        <h1>Trouvez le magasin qui vous correspond</h1>
-
-        <p>
-            Choisissez un magasin pour voir ses produits disponibles.
-        </p>
+        <div v-if="storeName" class="store-header__context">
+            <p>
+                Magasin actuel :
+                <strong>
+                    {{ storeName }}
+                    <span v-if="storeCity">
+                        — {{ storeCity }}
+                    </span>
+                </strong>
+            </p>
+        </div>
 
         <StoreHeaderNav />
     </header>

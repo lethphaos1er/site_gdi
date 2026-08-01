@@ -49,29 +49,17 @@ function selectSubcategory(subcategory) {
 
 <template>
     <main class="page-container store-page">
-        <StoreHeader />
+        <StoreHeader title="Backoffice magasin"
+            description="Sélectionnez un magasin à gérer ou ajoutez un nouveau point de vente." />
 
-        <StoreSelector
-            :stores="stores"
-            :selected-store="selectedStore"
-            @select-store="selectStore"
-        />
+        <StoreSelector :stores="stores" :selected-store="selectedStore" @select-store="selectStore" />
 
-        <OrderDateSelector
-            v-model="selectedOrderDate"
-            :min-date="todayDate"
-            :is-locked="cart.hasItems"
-            :locked-store-name="cart.storeName"
-        />
+        <OrderDateSelector v-model="selectedOrderDate" :min-date="todayDate" :is-locked="cart.hasItems"
+            :locked-store-name="cart.storeName" />
 
-        <StoreContent
-            :selected-store="selectedStore"
-            :selected-category="selectedCategory"
-            :selected-subcategory="selectedSubcategory"
-            :order-date="selectedOrderDate"
-            @select-category="selectCategory"
-            @select-subcategory="selectSubcategory"
-        />
+        <StoreContent :selected-store="selectedStore" :selected-category="selectedCategory"
+            :selected-subcategory="selectedSubcategory" :order-date="selectedOrderDate"
+            @select-category="selectCategory" @select-subcategory="selectSubcategory" />
 
         <CartDrawer />
     </main>

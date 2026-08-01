@@ -9,7 +9,6 @@ use Inertia\Inertia;
 Route::get('/', [HomeController::class, 'index'])
     ->name('home');
 
-// TODO: envoyer dans auth + verified middleware avant la fin du dev.
 Route::get('/checkout/redirect', function () {
     return Inertia::render('Checkout/Redirect');
 })->name('checkout.redirect');
@@ -39,11 +38,10 @@ Route::middleware(['auth', 'verified'])->group(function () {
         ->name('profile.destroy');
 });
 
-// TODO: restore auth and admin middleware when backoffice access control is activated.
-Route::prefix('backoffice')
+Route::middleware(['auth', 'verified', 'admin'])
+    ->prefix('backoffice')
     ->name('backoffice.')
     ->group(function () {
-
         Route::put(
             '/stores/{store}',
             [StoreController::class, 'update']

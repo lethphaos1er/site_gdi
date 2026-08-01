@@ -3,6 +3,7 @@ import { computed, ref } from 'vue';
 import StoreGrid from '@/Components/Backoffice/stores/StoreGrid.vue';
 import StoreCreateForm from '@/Components/Backoffice/stores/StoreCreateForm.vue';
 import SortSelect from '@/Components/Common/SortSelect.vue';
+import StoreHeader from '@/Components/Front/StoreSelection/StoreHeader.vue';
 
 const props = defineProps({
     stores: {
@@ -63,31 +64,48 @@ function closeCreateForm() {
 </script>
 
 <template>
+    <StoreHeader />
+
     <main class="page-container customer-dashboard">
-        <header>
-            <h1>Backoffice magasin</h1>
+        <section aria-labelledby="backoffice-title">
+            <h1 id="backoffice-title">
+                Backoffice magasin
+            </h1>
 
             <p>
                 Sélectionnez un magasin à gérer ou ajoutez un nouveau point de vente.
             </p>
 
-            <button type="button" class="button" @click="openCreateForm">
+            <button
+                type="button"
+                class="button"
+                @click="openCreateForm"
+            >
                 Ajouter un point de vente
             </button>
-        </header>
+        </section>
 
         <section v-if="isCreateFormOpen" class="store-create">
             <header class="store-create__header">
                 <h2>Ajouter un point de vente</h2>
 
-                <button type="button" class="button" @click="closeCreateForm">
+                <button
+                    type="button"
+                    class="button"
+                    @click="closeCreateForm"
+                >
                     Fermer
                 </button>
             </header>
 
             <StoreCreateForm @close="closeCreateForm" />
         </section>
-        <SortSelect v-model="sortBy" :options="sortOptions" />
+
+        <SortSelect
+            v-model="sortBy"
+            :options="sortOptions"
+        />
+
         <StoreGrid :stores="sortedStores" />
     </main>
 </template>
