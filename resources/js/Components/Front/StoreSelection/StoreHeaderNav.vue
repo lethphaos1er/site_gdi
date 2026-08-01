@@ -12,8 +12,16 @@ const page = usePage();
             </li>
 
             <template v-if="page.props.auth?.user">
+                <li v-if="page.props.auth.user.is_admin">
+                    <Link href="/backoffice/stores">
+                        Gestion des magasins
+                    </Link>
+                </li>
+
                 <li>
-                    <Link href="/profile">Mon profil</Link>
+                    <Link href="/profile">
+                        Mon profil
+                    </Link>
                 </li>
 
                 <li>
@@ -30,11 +38,15 @@ const page = usePage();
 
             <template v-else>
                 <li>
-                    <Link href="/login">Connexion</Link>
+                    <Link href="/login">
+                        Connexion
+                    </Link>
                 </li>
 
                 <li>
-                    <Link href="/register">Inscription</Link>
+                    <Link href="/register">
+                        Inscription
+                    </Link>
                 </li>
             </template>
         </ul>
