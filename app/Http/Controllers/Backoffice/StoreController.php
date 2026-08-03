@@ -8,6 +8,7 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 use Illuminate\Validation\Rule;
+use Illuminate\Validation\ValidationException;
 use Inertia\Inertia;
 use Inertia\Response;
 
@@ -67,7 +68,19 @@ class StoreController extends Controller
             ],
         ]);
 
-        $validated['slug'] = Str::slug($validated['name']);
+        $validated['slug'] = Str::slug(
+            $validated['name'] . '-' . $validated['city']
+        );
+
+        if (
+            Store::query()
+            ->where('slug', $validated['slug'])
+            ->exists()
+        ) {
+            throw ValidationException::withMessages([
+                'name' => 'Un magasin portant ce nom existe déjà dans cette ville.',
+            ]);
+        }
 
         Store::create($validated);
 
@@ -105,14 +118,27 @@ class StoreController extends Controller
             ],
         ]);
 
-        $validated['slug'] = Str::slug($validated['name']);
+        $validated['slug'] = Str::slug(
+            $validated['name'] . '-' . $validated['city']
+        );
+
+        if (
+            Store::query()
+            ->where('slug', $validated['slug'])
+            ->whereKeyNot($store->id)
+            ->exists()
+        ) {
+            throw ValidationException::withMessages([
+                'name' => 'Un magasin portant ce nom existe déjà dans cette ville.',
+            ]);
+        }
 
         $store->update($validated);
 
         return redirect()
             ->route('backoffice.stores.show', $store);
     }
-    
+
     public function destroy(Store $store): RedirectResponse
     {
         $store->delete();
