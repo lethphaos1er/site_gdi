@@ -2,10 +2,13 @@
 
 namespace App\Services;
 
+use App\Exceptions\StoreApiConnectionException;
+use App\Exceptions\StoreApiNotConfiguredException;
 use App\Models\Store;
+use Illuminate\Http\Client\ConnectionException;
 use Illuminate\Http\Client\PendingRequest;
+use Illuminate\Http\Client\Response;
 use Illuminate\Support\Facades\Http;
-use InvalidArgumentException;
 
 class StoreApiClient
 {
@@ -17,7 +20,7 @@ class StoreApiClient
         private readonly Store $store,
     ) {
         if (blank($this->store->api_base_url)) {
-            throw new InvalidArgumentException(
+            throw new StoreApiNotConfiguredException(
                 'Aucune URL d’API n’est configurée pour ce magasin.'
             );
         }
@@ -31,5 +34,22 @@ class StoreApiClient
             ->acceptJson()
             ->timeout(self::REQUEST_TIMEOUT)
             ->connectTimeout(self::CONNECTION_TIMEOUT);
+    }
+
+    public function get(string $endpoint, array $query = []): Response
+    {
+        try {
+            return $this->request()
+                ->get(
+                    ltrim($endpoint, '/'),
+                    $query
+                )
+                ->throw();
+        } catch (ConnectionException $exception) {
+            throw new StoreApiConnectionException(
+                'Impossible de contacter l’API du magasin.',
+                previous: $exception,
+            );
+        }
     }
 }
