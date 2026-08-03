@@ -41,6 +41,9 @@
     --color-legal-border: var(--color-border);
     --color-text-muted: #5f5f5f;
 
+    --color-success-background: #dff6e5;
+    --color-success-text: #14532d;
+
     /* ==========================================================
        SPACING
        ========================================================== */

@@ -1,5 +1,6 @@
 <script setup>
 import { computed, ref } from 'vue';
+import { usePage } from '@inertiajs/vue3';
 import StoreGrid from '@/Components/Backoffice/stores/StoreGrid.vue';
 import StoreCreateForm from '@/Components/Backoffice/stores/StoreCreateForm.vue';
 import SortSelect from '@/Components/Common/SortSelect.vue';
@@ -10,6 +11,12 @@ const props = defineProps({
         type: Array,
         required: true,
     },
+});
+
+const page = usePage();
+
+const successMessage = computed(() => {
+    return page.props.flash?.success ?? '';
 });
 
 const isCreateFormOpen = ref(false);
@@ -67,6 +74,14 @@ function closeCreateForm() {
     <StoreHeader />
 
     <main class="page-container customer-dashboard">
+        <p
+            v-if="successMessage"
+            class="feedback-message feedback-message--success"
+            role="status"
+        >
+            {{ successMessage }}
+        </p>
+
         <section aria-labelledby="backoffice-title">
             <h1 id="backoffice-title">
                 Backoffice magasin
@@ -85,9 +100,15 @@ function closeCreateForm() {
             </button>
         </section>
 
-        <section v-if="isCreateFormOpen" class="store-create">
+        <section
+            v-if="isCreateFormOpen"
+            class="store-create"
+            aria-labelledby="store-create-title"
+        >
             <header class="store-create__header">
-                <h2>Ajouter un point de vente</h2>
+                <h2 id="store-create-title">
+                    Ajouter un point de vente
+                </h2>
 
                 <button
                     type="button"

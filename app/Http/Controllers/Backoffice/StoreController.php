@@ -85,7 +85,8 @@ class StoreController extends Controller
         Store::create($validated);
 
         return redirect()
-            ->route('backoffice.stores.index');
+            ->route('backoffice.stores.index')
+            ->with('success', 'Le point de vente a bien été ajouté.');
     }
 
     public function update(
@@ -136,7 +137,8 @@ class StoreController extends Controller
         $store->update($validated);
 
         return redirect()
-            ->route('backoffice.stores.show', $store);
+            ->route('backoffice.stores.show', $store)
+            ->with('success', 'Les informations du magasin ont bien été enregistrées.');
     }
 
     public function destroy(Store $store): RedirectResponse
@@ -144,6 +146,7 @@ class StoreController extends Controller
         $store->delete();
 
         return redirect()
-            ->route('backoffice.stores.index');
+            ->route('backoffice.stores.index')
+            ->with('success', 'Le point de vente a bien été supprimé.');
     }
 }

@@ -135,3 +135,17 @@
     outline: none;
     border-color: var(--color-focus);
 }
+
+.feedback-message {
+    margin-bottom: 1.5rem;
+    padding: 1rem;
+
+    border-radius: 0.5rem;
+
+    font-weight: 700;
+}
+
+.feedback-message--success {
+    background-color: var(--color-success-background);
+    color: var(--color-success-text);
+}

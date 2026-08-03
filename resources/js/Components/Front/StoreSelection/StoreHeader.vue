@@ -14,7 +14,7 @@ defineProps({
 </script>
 
 <template>
-    <header class="store-header">
+    <header class="store-header page-container">
         <div v-if="storeName" class="store-header__context">
             <p>
                 Magasin actuel :
